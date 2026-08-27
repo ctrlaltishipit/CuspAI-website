@@ -10,7 +10,7 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 // target, so Lovable keeps building for its own cloudflare-module default and
 // nothing changes for local builds. Set VERCEL=1 locally to rehearse the real
 // Vercel build.
-const onVercel = !!process.env.VERCEL;
+const onVercel = !!process.env["VERCEL"];
 
 export default defineConfig({
   ...(onVercel ? { nitro: { preset: "vercel" } } : {}),

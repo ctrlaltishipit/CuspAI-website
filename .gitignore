@@ -34,3 +34,9 @@ dist-ssr
 # Vercel
 .vercel
 .env*
+# ...but the placeholder template carries no secrets and should be committed.
+!.env.example
+
+# Supabase CLI local state (link target, cached versions) — not project config.
+supabase/.temp/
+supabase/.branches/

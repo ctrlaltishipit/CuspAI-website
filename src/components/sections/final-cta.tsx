@@ -15,7 +15,7 @@ export function FinalCta() {
         </Reveal>
         <Reveal delay={120}>
           <div className="mx-auto mt-10 max-w-xl text-left">
-            <WaitlistForm id="email-final" />
+            <WaitlistForm id="email-final" source="final-cta" />
           </div>
           <p className="mt-6 font-mono text-[11px] tracking-[0.08em] text-muted-foreground md:text-xs">
             We'll email you once, when it opens.

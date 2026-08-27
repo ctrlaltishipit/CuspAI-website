@@ -287,7 +287,7 @@ function AboutPage() {
           </Reveal>
           <Reveal delay={120}>
             <div className="glass-card mx-auto mt-9 max-w-xl rounded-2xl p-5 text-left md:p-6">
-              <WaitlistForm id="email-about" />
+              <WaitlistForm id="email-about" source="about" />
             </div>
             <p className="mt-6 font-mono text-[11px] tracking-[0.08em] text-muted-foreground md:text-xs">
               Or see{" "}

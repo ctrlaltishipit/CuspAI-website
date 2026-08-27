@@ -43,7 +43,7 @@ export function Hero() {
 
           <Reveal delay={260}>
             <div className="mt-10 max-w-xl">
-              <WaitlistForm id="email-hero" />
+              <WaitlistForm id="email-hero" source="hero" />
               <p className="mt-4 font-mono text-[11px] tracking-[0.08em] text-muted-foreground md:text-xs">
                 One email when CuspAI opens. Nothing else.
               </p>
