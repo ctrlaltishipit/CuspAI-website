@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { Logo } from "@/components/logo";
 import { useEffect, useState } from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
 
@@ -21,8 +22,8 @@ export function SiteNav() {
       }`}
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 md:px-8">
-        <Link to="/" className="font-display text-xl tracking-tight text-foreground">
-          CuspAI
+        <Link to="/" aria-label="CuspAI — home" className="flex items-center">
+          <Logo className="h-7 md:h-8" />
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
@@ -48,10 +49,7 @@ export function SiteNav() {
 
         <div className="flex items-center gap-2 md:gap-3">
           <ThemeToggle />
-          <a
-            href="#early-access"
-            className="btn-accent rounded-full px-4 py-2 text-sm font-medium"
-          >
+          <a href="#early-access" className="btn-accent rounded-full px-4 py-2 text-sm font-medium">
             Get early access
           </a>
         </div>
