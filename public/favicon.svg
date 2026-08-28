@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="14 14 68 68"
+     role="img" aria-label="CuspAI">
+  <!-- The mark alone. The wordmark is unreadable at 16px, so the arcs carry the
+       brand here. Colours follow the browser's theme so the mark stays visible
+       on both a light and a dark tab strip. -->
+  <defs>
+    <linearGradient id="g-light" x1="22" y1="19" x2="77" y2="78" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#072f36"/>
+      <stop offset="0.52" stop-color="#0d4a53"/>
+      <stop offset="1" stop-color="#197785"/>
+    </linearGradient>
+    <linearGradient id="g-dark" x1="22" y1="19" x2="77" y2="78" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2b8496"/>
+      <stop offset="0.52" stop-color="#4fb3c4"/>
+      <stop offset="1" stop-color="#7fd2de"/>
+    </linearGradient>
+    <style>
+      .arc { fill: none; stroke: url(#g-light); stroke-linecap: round; }
+      .dot { fill: #197785; }
+      @media (prefers-color-scheme: dark) {
+        .arc { stroke: url(#g-dark); }
+        .dot { fill: #7fd2de; }
+      }
+    </style>
+  </defs>
+  <g class="arc">
+    <path d="M 64.016 19.861 A 29 29 0 1 0 64.016 76.139" stroke-width="6.5"/>
+    <path d="M 62.322 26.653 A 22 22 0 1 0 62.322 69.347" stroke-width="4.75"/>
+    <path d="M 60.629 33.446 A 15 15 0 1 0 60.629 62.554" stroke-width="3.25"/>
+  </g>
+  <circle class="dot" cx="69" cy="48" r="7"/>
+</svg>
