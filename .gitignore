@@ -40,3 +40,6 @@ dist-ssr
 # Supabase CLI local state (link target, cached versions) — not project config.
 supabase/.temp/
 supabase/.branches/
+
+# Vite build cache
+.vite/

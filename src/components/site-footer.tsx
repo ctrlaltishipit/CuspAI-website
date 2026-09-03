@@ -51,10 +51,6 @@ export function SiteFooter() {
         >
           hello@cusp.app
         </a>
-
-        <p className="mt-6 font-mono text-[11px] tracking-[0.08em] text-muted-foreground md:text-xs">
-          Made in Bengaluru. Prices in INR including GST.
-        </p>
       </div>
     </footer>
   );
