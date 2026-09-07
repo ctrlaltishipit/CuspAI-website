@@ -117,9 +117,9 @@ const ticker = [
 
 function UseCasesPage() {
   return (
-    <main className="pt-28 md:pt-36">
+    <main>
       {/* ---------------- Hero ---------------- */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden pt-28 md:pt-36">
         <div className="pointer-events-none absolute inset-0" aria-hidden="true">
           <div className="aurora absolute inset-0 opacity-70" />
           <div className="orb left-[6%] top-[8%] h-56 w-56 bg-accent/40" />

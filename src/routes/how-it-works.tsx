@@ -160,9 +160,9 @@ const SURFACES: {
 
 function HowItWorksPage() {
   return (
-    <main className="pt-28 md:pt-36">
+    <main>
       {/* ---------------- Hero ---------------- */}
-      <section className="relative overflow-hidden pb-14 md:pb-20">
+      <section className="relative overflow-hidden pt-28 pb-14 md:pt-36 md:pb-20">
         <div className="pointer-events-none absolute inset-0" aria-hidden="true">
           <div className="aurora absolute inset-0 opacity-70" />
           <div className="orb left-[5%] top-[12%] h-56 w-56 bg-accent/35" />

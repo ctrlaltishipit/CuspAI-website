@@ -28,22 +28,22 @@ export function SiteNav() {
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
           <Link
-            to="/use-cases"
-            className="link-underline text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
-          >
-            Use cases
-          </Link>
-          <Link
             to="/about"
             className="link-underline text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
           >
-            About
+            About Us
           </Link>
           <Link
             to="/how-it-works"
             className="link-underline text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
           >
             How it works
+          </Link>
+          <Link
+            to="/use-cases"
+            className="link-underline text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
+          >
+            Use cases
           </Link>
         </nav>
 

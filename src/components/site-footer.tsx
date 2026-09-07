@@ -14,6 +14,18 @@ export function SiteFooter() {
           aria-label="Footer"
         >
           <Link
+            to="/about"
+            className="text-sm text-muted-foreground transition-colors duration-150 hover:text-foreground"
+          >
+            About Us
+          </Link>
+          <Link
+            to="/how-it-works"
+            className="text-sm text-muted-foreground transition-colors duration-150 hover:text-foreground"
+          >
+            How it works
+          </Link>
+          <Link
             to="/use-cases"
             className="text-sm text-muted-foreground transition-colors duration-150 hover:text-foreground"
           >
@@ -30,18 +42,6 @@ export function SiteFooter() {
             className="text-sm text-muted-foreground transition-colors duration-150 hover:text-foreground"
           >
             Terms
-          </Link>
-          <Link
-            to="/how-it-works"
-            className="text-sm text-muted-foreground transition-colors duration-150 hover:text-foreground"
-          >
-            How it works
-          </Link>
-          <Link
-            to="/about"
-            className="text-sm text-muted-foreground transition-colors duration-150 hover:text-foreground"
-          >
-            About
           </Link>
         </nav>
 

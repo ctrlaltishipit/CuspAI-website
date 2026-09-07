@@ -16,7 +16,7 @@ export const Route = createFileRoute("/privacy")({
 
 function PrivacyPage() {
   return (
-    <main className="mx-auto max-w-3xl px-5 pt-40 pb-24 md:px-8 md:pt-48 md:pb-32">
+    <main className="mx-auto max-w-3xl px-5 pt-28 pb-24 md:px-8 md:pt-36 md:pb-32">
       <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted-foreground md:text-xs">
         Draft · Last updated 26 Aug 2026
       </p>
