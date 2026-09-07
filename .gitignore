@@ -43,3 +43,6 @@ supabase/.branches/
 
 # Vite build cache
 .vite/
+
+# VS Code multi-root workspace files are per-machine editor state.
+*.code-workspace
