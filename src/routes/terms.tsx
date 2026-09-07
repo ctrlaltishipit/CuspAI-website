@@ -36,10 +36,10 @@ function TermsPage() {
         <p>
           Questions in the meantime:{" "}
           <a
-            href="mailto:hello@cusp.app"
+            href="mailto:hello@cuspai.io"
             className="text-foreground underline decoration-border underline-offset-4"
           >
-            hello@cusp.app
+            hello@cuspai.io
           </a>
           .
         </p>

@@ -46,10 +46,10 @@ export function SiteFooter() {
         </nav>
 
         <a
-          href="mailto:hello@cusp.app"
+          href="mailto:hello@cuspai.io"
           className="mt-8 inline-block text-sm text-muted-foreground transition-colors duration-150 hover:text-foreground"
         >
-          hello@cusp.app
+          hello@cuspai.io
         </a>
       </div>
     </footer>
