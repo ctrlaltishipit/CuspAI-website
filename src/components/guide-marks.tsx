@@ -113,7 +113,7 @@ export function ReasonMark({ className = "" }: { className?: string }) {
 
 /** Each stage carries the glyph of the surface it actually happens on. */
 const LOOP_STAGES = [
-  { label: "Pick your worlds", icon: "discover" },
+  { label: "Pick your interests", icon: "discover" },
   { label: "Read the day", icon: "today" },
   { label: "Build something", icon: "build" },
   { label: "Close the gap", icon: "gap" },
@@ -133,7 +133,7 @@ export function LoopDiagram({ className = "" }: { className?: string }) {
       viewBox="0 0 760 232"
       className={`h-auto w-full ${className}`}
       role="img"
-      aria-label="The CuspAI loop: pick your worlds, read the day, build something, close the gap, then it starts again tomorrow."
+      aria-label="The CuspAI loop: pick your interests, read the day, build something, close the gap, then it starts again tomorrow."
     >
       {/* connectors between stages */}
       {xs.slice(0, -1).map((x, i) => {

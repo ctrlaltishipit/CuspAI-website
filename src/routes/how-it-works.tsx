@@ -31,20 +31,20 @@ export const Route = createFileRoute("/how-it-works")({
 const START = [
   {
     n: "01",
-    title: "Pick your worlds",
-    body: "Choose the field you work in and the things you love outside it. There is no twenty-question onboarding and no plan to choose: the picks are the whole setup, and you can change them any time.",
+    title: "Pick your interests",
+    body: "Choose the industry you work in and the things you enjoy outside it. There is no twenty-question sign-up and no plan to choose: the picks are the whole setup, and you can change them any time.",
     shot: {
-      label: "Screenshot: picking your worlds",
+      label: "Screenshot: picking your interests",
       src: "/screens/welcome-tall-light.webp",
       srcDark: "/screens/welcome-tall-dark.webp",
-      alt: "The CuspAI setup screen asking what you want to keep up with, with field and interest topics offered as chips.",
+      alt: "The CuspAI setup screen asking what you want to keep up with, with industry and interest topics offered as chips.",
     },
     note: "Under 60 seconds",
   },
   {
     n: "02",
     title: "Read the day",
-    body: "Next morning you get a short, dated list: the few things that changed in those worlds. Each one names its source, its length, and the reason it reached you. At the bottom is a card telling you that you're current.",
+    body: "Next morning you get a short, dated list: the few things that changed in those areas. Each one names its source, its length, and the reason it reached you. At the bottom is a card telling you that you're current.",
     shot: {
       label: "Screenshot: the day's read",
       src: "/screens/today-tall-light.webp",
@@ -99,7 +99,7 @@ const SURFACES: {
     body: "The finite daily read. Open an item and you get a condensed version of the argument with the reason still attached at the top. Once you've read it, CuspAI won't show it to you again.",
     points: [
       "Three to five items, then it ends",
-      "Every item states which of your worlds it came from",
+      "Every item states which of your interests it came from",
       "Read once, never re-served",
     ],
     shot: {
@@ -113,11 +113,11 @@ const SURFACES: {
     key: "discover",
     name: "Discover",
     when: "When you have five spare minutes",
-    body: "A small set of pieces just outside your daily read, picked for how closely they sit to what you already follow, plus the worlds you have not chosen yet. Adding one changes tomorrow's read, not today's.",
+    body: "A small set of pieces just outside your daily read, picked for how closely they sit to what you already follow, plus the areas of interest you have not chosen yet. Adding one changes tomorrow's read, not today's.",
     points: [
       "Chosen for how close they sit, never for trending",
       "Still finite: it tells you when that's the whole set",
-      "Add a world and tomorrow shifts",
+      "Add an interest and tomorrow shifts",
     ],
     shot: {
       label: "Screenshot: Discover",

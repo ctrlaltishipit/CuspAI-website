@@ -36,12 +36,12 @@ const steps = [
       "No checkboxes, no twenty-question onboarding. CuspAI reads the sentence, shows him the topics it heard, and lets him strike out the ones it got wrong.",
     ],
     slot: {
-      label: "Screenshot: picking your worlds",
+      label: "Screenshot: picking your interests",
       src: "/screens/welcome-tall-light.webp",
       srcDark: "/screens/welcome-tall-dark.webp",
-      alt: "CuspAI's first screen: \u201cWhat do you want to keep up with?\u201d, with the field and interest topics offered as chips and four already picked.",
+      alt: "CuspAI's first screen: \u201cWhat do you want to keep up with?\u201d, with the industry and interest topics offered as chips and four already picked.",
       caption:
-        "The first screen. Your field and your interests, picked in one pass \u2014 and every item CuspAI later shows names which of them it came from.",
+        "The first screen. Your industry and your interests, picked in one pass, and every item CuspAI later shows names which of them it came from.",
       ratio: "phone" as const,
     },
     facts: ["Setup: under 60 seconds", "Topics: 4 typed, 0 chosen from a list"],
@@ -98,7 +98,7 @@ const steps = [
       srcDark: "/screens/read-tall-dark.webp",
       alt: "A single CuspAI item opened: headline, source, read time, the reason it was chosen, then a condensed read of the argument.",
       caption:
-        "One item, opened. The reason it reached you stays attached to the piece \u2014 and once it's read, CuspAI doesn't show it to you again.",
+        "One item, opened. The reason it reached you stays attached to the piece, and once it's read, CuspAI doesn't show it to you again.",
       ratio: "phone" as const,
     },
     facts: ["Time to ship: 1 weekend", "Tabs open: 3"],

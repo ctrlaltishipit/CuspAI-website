@@ -10,7 +10,7 @@ const STEPS = [
     shot: {
       src: "/screens/welcome-phone-light.webp",
       srcDark: "/screens/welcome-phone-dark.webp",
-      alt: "CuspAI asking what you want to keep up with, with your field and your interests offered as chips.",
+      alt: "CuspAI asking what you want to keep up with, with your industry and your interests offered as chips.",
     },
   },
   {

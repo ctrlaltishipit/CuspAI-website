@@ -43,7 +43,7 @@ const PRINCIPLES = [
   {
     Mark: ReasonMark,
     title: "It shows its reasoning",
-    body: "Every item carries the reason it reached you: which of your worlds it came from, and why it beat the things we dropped.",
+    body: "Every item carries the reason it reached you: which of your interests it came from, and why it beat the things we dropped.",
   },
   {
     Mark: PriceMark,
@@ -133,7 +133,7 @@ function AboutPage() {
             <Reveal delay={140}>
               <p>
                 CuspAI works the other way. Each morning it gives you the few things that genuinely
-                changed in the worlds you follow, each one stating why it is in front of you. Then
+                changed in the areas you follow, each one stating why it is in front of you. Then
                 it stops and tells you so. Nothing accumulates, and there is no backlog to feel
                 guilty about.
               </p>
