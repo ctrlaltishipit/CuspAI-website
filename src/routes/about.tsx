@@ -15,13 +15,13 @@ import {
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About — CuspAI" },
+      { title: "About CuspAI" },
       {
         name: "description",
         content:
           "What CuspAI is, why it exists, and what we are actually trying to do: a daily read that ends and a verdict that commits, priced in rupees.",
       },
-      { property: "og:title", content: "About — CuspAI" },
+      { property: "og:title", content: "About CuspAI" },
       {
         property: "og:description",
         content:
@@ -43,7 +43,7 @@ const PRINCIPLES = [
   {
     Mark: ReasonMark,
     title: "It shows its reasoning",
-    body: "Every item carries the reason it reached you — which of your worlds it came from and why it beat the things we dropped.",
+    body: "Every item carries the reason it reached you: which of your worlds it came from, and why it beat the things we dropped.",
   },
   {
     Mark: PriceMark,
@@ -71,7 +71,7 @@ const REASONS = [
   {
     n: "04",
     title: "We tell you what not to buy",
-    body: "We publish what we declined to recommend and why — including tools that pay us a commission and that we still tell you to skip. A recommendation you can trust requires a refusal you can read.",
+    body: "We publish what we declined to recommend and why, including tools that pay us a commission and that we still tell you to skip. A recommendation you can trust requires a refusal you can read.",
   },
 ];
 
@@ -105,7 +105,8 @@ function AboutPage() {
           <Reveal delay={200}>
             <p className="mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground">
               CuspAI is a daily read that ends and a verdict that commits. It tells you what
-              changed, what to use, and what to learn next — dated, reasoned, and priced in rupees.
+              changed, what to use, and what to learn next. Every answer is dated, reasoned, and
+              priced in rupees.
             </p>
           </Reveal>
         </div>
@@ -124,7 +125,7 @@ function AboutPage() {
           <div className="mt-10 max-w-2xl space-y-6 text-lg leading-relaxed text-muted-foreground">
             <Reveal delay={80}>
               <p>
-                Most products in this space hand you volume and call it value — an endless feed, a
+                Most products in this space hand you volume and call it value: an endless feed, a
                 long newsletter, an eighteen-month roadmap with nothing to do about it this week.
                 You finish none of them, and none of them leaves you with a decision.
               </p>
@@ -139,10 +140,10 @@ function AboutPage() {
             </Reveal>
             <Reveal delay={200}>
               <p>
-                When something needs deciding — which tool, which subscription to cancel, what to
-                learn before your next role — you ask in one line. What comes back is a pick, a
-                runner-up, one thing to stop paying for, and the reasoning behind each, with rupee
-                costs and the date they were checked.
+                When something needs deciding, you ask in one line. Which tool, which subscription
+                to cancel, what to learn for your role or before your next role. What comes back is
+                a pick, a runner-up, one thing to stop paying for, and the reasoning behind each,
+                with rupee costs and the date they were checked.
               </p>
             </Reveal>
           </div>
@@ -191,7 +192,7 @@ function AboutPage() {
         </div>
       </section>
 
-      {/* ---------------- Vision / Mission / North star ---------------- */}
+      {/* ---------------- Vision / Mission / What we measure ---------------- */}
       <section className="band-deep relative overflow-hidden bg-background py-[80px] text-foreground md:py-[130px]">
         <PaperGrid className="opacity-20" />
         <div className="relative mx-auto max-w-4xl px-5 md:px-8">
@@ -233,11 +234,11 @@ function AboutPage() {
                 </div>
                 <div className="md:col-span-9">
                   <h2 className="font-display text-2xl leading-snug tracking-tight text-balance md:text-[2.1rem]">
-                    Turn what changed into what to do — in under two minutes a day.
+                    Turn what changed into what to do, in under two minutes a day.
                   </h2>
                   <p className="mt-4 max-w-xl leading-relaxed text-muted-foreground">
                     Read the fields our members work in, drop everything that only made noise, and
-                    hand back the few things that move a decision — each with its reasoning, its
+                    hand back the few things that move a decision, each with its reasoning, its
                     rupee price, and the date it was checked.
                   </p>
                 </div>
@@ -249,7 +250,7 @@ function AboutPage() {
                 <div className="md:col-span-3">
                   <NorthStarMark className="h-7 w-7 text-accent-2" />
                   <p className="mt-4 font-mono text-[11px] tracking-[0.14em] uppercase text-muted-foreground md:text-xs">
-                    North star
+                    What we measure
                   </p>
                 </div>
                 <div className="md:col-span-9">
@@ -257,12 +258,12 @@ function AboutPage() {
                     Decisions taken and kept.
                   </h2>
                   <p className="mt-4 max-w-xl leading-relaxed text-muted-foreground">
-                    Not opens, not minutes read, not subscriber count — every one of those goes up
-                    when we waste your time. The number we judge ourselves on is how many members
-                    acted on a verdict and were still glad they did ninety days later.
+                    Opens, minutes read and subscriber count all climb when we waste your time, so
+                    none of them tell us anything. The number we judge ourselves on is how many
+                    members acted on a verdict and were still glad they did ninety days later.
                   </p>
                   <p className="mt-5 font-mono text-[11px] leading-relaxed tracking-[0.06em] text-muted-foreground md:text-xs">
-                    If that number falls, the product is wrong — however good everything else looks.
+                    If that number falls, the product is wrong, however good everything else looks.
                   </p>
                 </div>
               </article>
@@ -282,7 +283,7 @@ function AboutPage() {
               Tell us what you follow.
             </h2>
             <p className="mx-auto mt-5 max-w-lg leading-relaxed text-muted-foreground">
-              We'll tell you what's worth your evening — and what to stop paying for.
+              We'll tell you what's worth your evening, and what to stop paying for.
             </p>
           </Reveal>
           <Reveal delay={120}>

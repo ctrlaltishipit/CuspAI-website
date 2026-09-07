@@ -201,6 +201,16 @@
     }
   }
 
+  /* Screenshot emphasis driven by <ScrollFocus>. The inline styles it writes
+     supply the values; these are the resting state and the smoothing. */
+  .scroll-focus {
+    transform-origin: center;
+    will-change: opacity, transform;
+    transition:
+      opacity 120ms linear,
+      transform 120ms linear;
+  }
+
   .card-lift {
     transition:
       transform 300ms cubic-bezier(0.16, 1, 0.3, 1),
@@ -225,6 +235,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .scroll-focus,
     .reveal,
     .card-lift,
     .link-underline {

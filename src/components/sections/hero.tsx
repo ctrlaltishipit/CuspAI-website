@@ -60,14 +60,12 @@ export function Hero() {
 
         <Reveal delay={320} variant="scale">
           <Parallax speed={46}>
-            <div className="glass-card rounded-[2.25rem] p-4">
-              <PhoneFrame
-                src="/screens/stack-phone-light.webp"
-                srcDark="/screens/stack-phone-dark.webp"
-                alt="The CuspAI app showing a stack it built: a free track and a paid track, each tool listed with what it costs and the one line explaining why it was chosen."
-                caption="An actual verdict. 26 Aug 2026."
-              />
-            </div>
+            <PhoneFrame
+              src="/screens/stack-phone-light.webp"
+              srcDark="/screens/stack-phone-dark.webp"
+              alt="The CuspAI app showing a stack it built: a free track and a paid track, each tool listed with what it costs and the one line explaining why it was chosen."
+              caption="An actual verdict. 26 Aug 2026."
+            />
           </Parallax>
         </Reveal>
       </div>

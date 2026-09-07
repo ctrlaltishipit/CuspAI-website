@@ -3,9 +3,9 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/terms")({
   head: () => ({
     meta: [
-      { title: "Terms of Service — CuspAI" },
+      { title: "CuspAI Terms of Service" },
       { name: "description", content: "The terms that govern use of CuspAI." },
-      { property: "og:title", content: "Terms of Service — CuspAI" },
+      { property: "og:title", content: "CuspAI Terms of Service" },
       { property: "og:description", content: "The terms that govern use of CuspAI." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

@@ -80,7 +80,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "CuspAI — the truth about what to use and what to learn" },
+      { title: "CuspAI: the truth about what to use and what to learn" },
       {
         name: "description",
         content:

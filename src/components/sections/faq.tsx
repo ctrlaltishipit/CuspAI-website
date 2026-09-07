@@ -9,7 +9,7 @@ const ITEMS = [
   },
   {
     q: "Do you read my email?",
-    a: "No. CuspAI does not connect to your inbox — the most-requested thing we've decided not to build.",
+    a: "No. CuspAI does not connect to your inbox. It is the most-requested thing we have decided not to build.",
   },
   {
     q: "How do you pick what to recommend?",
@@ -21,7 +21,7 @@ const ITEMS = [
   },
   {
     q: "What if you're wrong?",
-    a: "It goes in your Decision Ledger — dated, marked wrong, in our words, permanently.",
+    a: "It goes in your Decision Ledger, dated, marked wrong, in our words, permanently.",
   },
   {
     q: "Is there an Android version?",

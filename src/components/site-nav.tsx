@@ -22,7 +22,7 @@ export function SiteNav() {
       }`}
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 md:px-8">
-        <Link to="/" aria-label="CuspAI — home" className="flex items-center">
+        <Link to="/" aria-label="CuspAI home" className="flex items-center">
           <Logo className="h-7 md:h-8" />
         </Link>
 

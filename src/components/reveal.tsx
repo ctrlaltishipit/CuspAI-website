@@ -153,3 +153,67 @@ export function ScrollProgress() {
     </div>
   );
 }
+
+/**
+ * Continuous scroll-linked emphasis for a screenshot.
+ *
+ * Unlike <Reveal>, which fires once, this keeps tracking: the child fades up
+ * and scales toward full size as it approaches the middle of the viewport, and
+ * eases back down as it leaves. That gives the screenshots a sense of focus
+ * while they are the thing being read, without a frame drawn around them.
+ *
+ * Disabled under reduced motion, where the child simply renders at rest.
+ */
+export function ScrollFocus({
+  children,
+  className = "",
+  minOpacity = 0.45,
+  minScale = 0.9,
+  /** How far from centre, in viewport heights, the effect reaches zero. */
+  falloff = 0.72,
+}: {
+  children: ReactNode;
+  className?: string;
+  minOpacity?: number;
+  minScale?: number;
+  falloff?: number;
+}) {
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight || 1;
+      // 0 when the element's centre sits on the viewport centre, 1 at falloff.
+      const offset = Math.abs(rect.top + rect.height / 2 - vh / 2) / vh;
+      const t = Math.min(1, Math.max(0, 1 - offset / falloff));
+      // Ease so the element spends longer at full focus than at the edges.
+      const eased = t * t * (3 - 2 * t);
+      el.style.opacity = String(minOpacity + (1 - minOpacity) * eased);
+      el.style.transform = `scale(${(minScale + (1 - minScale) * eased).toFixed(4)})`;
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [minOpacity, minScale, falloff]);
+
+  return (
+    <div ref={ref} className={`scroll-focus ${className}`}>
+      {children}
+    </div>
+  );
+}

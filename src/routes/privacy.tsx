@@ -3,9 +3,9 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
-      { title: "Privacy Policy — CuspAI" },
+      { title: "CuspAI Privacy Policy" },
       { name: "description", content: "How CuspAI handles your data. Built to the DPDP Act." },
-      { property: "og:title", content: "Privacy Policy — CuspAI" },
+      { property: "og:title", content: "CuspAI Privacy Policy" },
       { property: "og:description", content: "How CuspAI handles your data. Built to the DPDP Act." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

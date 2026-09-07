@@ -36,7 +36,7 @@ export function Sceptics() {
 
         <Reveal delay={120}>
           <p className="mt-16 max-w-2xl font-display text-2xl leading-snug tracking-tight text-balance md:text-[2rem] md:leading-snug">
-            We take affiliate commissions — and we publish everything we
+            We take affiliate commissions, and we publish everything we
             refused to recommend, including the ones that pay us.
           </p>
         </Reveal>
@@ -51,7 +51,7 @@ export function Sceptics() {
               Read what we refuse →
             </Link>
             <span className="ml-3 font-mono text-[11px] tracking-[0.08em] text-muted-foreground md:text-xs">
-              Vision, mission, north star
+              Vision, mission, and the number we measure
             </span>
             <div className="mt-3">
               <Link

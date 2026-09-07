@@ -5,7 +5,7 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-border">
       <div className="mx-auto max-w-6xl px-5 py-16 md:px-8 md:py-20">
-        <Link to="/" aria-label="CuspAI — home" className="inline-flex items-center">
+        <Link to="/" aria-label="CuspAI home" className="inline-flex items-center">
           <Logo className="h-8" />
         </Link>
 

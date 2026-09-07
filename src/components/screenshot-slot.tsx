@@ -1,4 +1,5 @@
 import { ThemedShot } from "@/components/themed-shot";
+import { ScrollFocus } from "@/components/reveal";
 
 type ScreenshotSlotProps = {
   label: string;
@@ -16,9 +17,12 @@ type ScreenshotSlotProps = {
 };
 
 /**
- * A reserved, correctly-proportioned frame for a product screenshot.
- * With `src` it shows the real capture; without one it falls back to a
- * labelled placeholder that holds the exact same layout space.
+ * A reserved, correctly-proportioned slot for a product screenshot.
+ *
+ * A real capture is shown bare, with no border or card behind it, and is faded
+ * and scaled by <ScrollFocus> as it crosses the viewport. Without `src` it
+ * falls back to a labelled placeholder that keeps its outline, so the reserved
+ * space stays visible, and holds the exact same layout space.
  */
 export function ScreenshotSlot({
   label,
@@ -30,10 +34,10 @@ export function ScreenshotSlot({
 }: ScreenshotSlotProps) {
   return (
     <figure className="w-full">
-      <div
-        className={`card-lift relative overflow-hidden rounded-xl border border-border bg-card ${
-          ratio === "phone" ? "aspect-[9/16] max-w-[280px]" : "aspect-[16/10]"
-        }`}
+      <ScrollFocus
+        className={`relative overflow-hidden rounded-xl ${
+          src ? "" : "card-lift border border-border bg-card"
+        } ${ratio === "phone" ? "aspect-[9/16] max-w-[280px]" : "aspect-[16/10]"}`}
       >
         {src ? (
           <ThemedShot src={src} srcDark={srcDark} alt={alt ?? label} />
@@ -53,7 +57,7 @@ export function ScreenshotSlot({
             </span>
           </div>
         )}
-      </div>
+      </ScrollFocus>
       {caption ? (
         <figcaption className="mt-3 font-mono text-[11px] leading-relaxed tracking-[0.06em] text-muted-foreground">
           {caption}

@@ -42,7 +42,7 @@ const SURFACES = [
     shot: {
       src: "/screens/today-phone-light.webp",
       srcDark: "/screens/today-phone-dark.webp",
-      alt: "The Signal in CuspAI: the day's short list, each item stating the topic it came from and why it surfaced.",
+      alt: "The Signal in CuspAI: the day's short list, each item stating the topic it came from and why it was chosen.",
     },
   },
   {
@@ -53,7 +53,7 @@ const SURFACES = [
     shot: {
       src: "/screens/gap-phone-light.webp",
       srcDark: "/screens/gap-phone-dark.webp",
-      alt: "The Gap in CuspAI: the distance from your current role to the one you're aiming at, named as three skills rather than scored.",
+      alt: "The Gap in CuspAI: the distance from your current role to the one you're aiming at, named as three skills instead of a score.",
     },
   },
 ];
@@ -61,7 +61,7 @@ const SURFACES = [
 export function Surfaces() {
   return (
     <section className="seam-top">
-      {/* THE STACK — the commercial centre */}
+      {/* THE STACK: the commercial centre */}
       <div className="relative overflow-hidden py-[80px] md:py-[150px]">
         <PaperGrid className="opacity-40" />
         <div className="relative mx-auto max-w-4xl px-5 md:px-8">
@@ -71,8 +71,8 @@ export function Surfaces() {
               What you should use, and what you should be paying.
             </h2>
             <p className="mt-7 max-w-xl text-lg leading-relaxed text-muted-foreground">
-              Ask a real question — “do I need Lovable if I already pay for
-              Cursor?” — and get one pick, one runner-up, and one card that
+              Ask a real question, such as “do I need Lovable if I already pay
+              for Cursor?”, and get one pick, one runner-up, and one card that
               says skip this.
             </p>
           </Reveal>

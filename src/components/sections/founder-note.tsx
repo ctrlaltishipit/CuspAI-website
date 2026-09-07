@@ -21,7 +21,7 @@ export function FounderNote() {
               someone the tools were paying.
             </p>
             <p>
-              So you pay me instead — which means I have to be right often
+              So you pay me instead, which means I have to be right often
               enough to be worth ₹249. The Refusal List and the Decision Ledger
               exist so you can check whether I am.
             </p>

@@ -62,7 +62,7 @@ export function WaitlistForm({ id, source }: { id: string; source?: string }) {
         <p className="mt-3 font-mono text-[11px] tracking-[0.08em] text-muted-foreground md:text-xs">
           {alreadyJoined
             ? `${email.trim()} was already down. One email, when CuspAI opens.`
-            : `We'll email ${email.trim()} — one email, when CuspAI opens.`}
+            : `We'll email ${email.trim()} once, when CuspAI opens.`}
         </p>
       </div>
     );
@@ -74,7 +74,7 @@ export function WaitlistForm({ id, source }: { id: string; source?: string }) {
       : status === "invalid"
         ? "That doesn't look like an email address."
         : status === "error"
-          ? "Something went wrong on our end. Your details are still here — try again."
+          ? "Something went wrong on our end. Your details are still here, so try again."
           : null;
 
   return (

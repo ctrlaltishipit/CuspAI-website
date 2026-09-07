@@ -11,13 +11,13 @@ import { FinalCta } from "@/components/sections/final-cta";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "CuspAI — a dated, reasoned verdict on what to use and what to learn" },
+      { title: "CuspAI: a dated, reasoned verdict on what to use and what to learn" },
       {
         name: "description",
         content:
-          "CuspAI gives working professionals in India one pick, one runner-up, and one thing to stop paying for — with prices in rupees and the dates they were checked.",
+          "CuspAI gives working professionals in India one pick, one runner-up, and one thing to stop paying for, with prices in rupees and the dates they were checked.",
       },
-      { property: "og:title", content: "CuspAI — the truth about what to use and what to learn" },
+      { property: "og:title", content: "CuspAI: the truth about what to use and what to learn" },
       {
         property: "og:description",
         content:

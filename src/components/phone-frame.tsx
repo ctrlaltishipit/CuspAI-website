@@ -1,12 +1,18 @@
 import type { ReactNode } from "react";
 import { ThemedShot } from "@/components/themed-shot";
+import { ScrollFocus } from "@/components/reveal";
 
 /**
- * Neutral device frame holding a screenshot of the product.
+ * A product screenshot at the app's 9/19 ratio.
+ *
+ * Real captures are shown bare: no device chrome, border or card behind them,
+ * so the screen itself is the only thing on the page. <ScrollFocus> fades and
+ * scales it as it crosses the viewport. Only the placeholder keeps an outline,
+ * because without one there would be nothing to see.
  *
  * Pass `src`/`srcDark` for a real capture (the images in `public/screens` are
- * cut to this frame's 9/19 ratio), or `children` for bespoke content. With
- * neither, <PlaceholderVerdict /> holds the layout space.
+ * cut to this ratio), or `children` for bespoke content. With neither,
+ * <PlaceholderVerdict /> holds the layout space.
  */
 export function PhoneFrame({
   children,
@@ -23,10 +29,16 @@ export function PhoneFrame({
   caption?: string;
   className?: string;
 }) {
+  const isPlaceholder = !children && !src;
+
   return (
     <figure className={className}>
-      <div className="mx-auto w-full max-w-[300px] rounded-[2rem] border border-border bg-card p-2 shadow-[0_1px_2px_color-mix(in_oklab,var(--color-foreground)_6%,transparent)]">
-        <div className="relative aspect-[9/19] overflow-hidden rounded-[1.6rem] border border-border bg-muted">
+      <ScrollFocus className="mx-auto w-full max-w-[300px]">
+        <div
+          className={`relative aspect-[9/19] overflow-hidden rounded-[1.6rem] ${
+            isPlaceholder ? "border border-border bg-muted" : ""
+          }`}
+        >
           {children ??
             (src ? (
               <ThemedShot src={src} srcDark={srcDark} alt={alt ?? ""} />
@@ -34,7 +46,7 @@ export function PhoneFrame({
               <PlaceholderVerdict />
             ))}
         </div>
-      </div>
+      </ScrollFocus>
       {caption ? (
         <figcaption className="mt-4 text-center font-mono text-[11px] tracking-[0.08em] text-muted-foreground md:text-xs">
           {caption}
@@ -46,7 +58,7 @@ export function PhoneFrame({
 
 function PlaceholderVerdict() {
   return (
-    <div className="flex h-full flex-col gap-2 p-4" aria-label="Screenshot placeholder — replace with a real verdict screen">
+    <div className="flex h-full flex-col gap-2 p-4" aria-label="Screenshot placeholder, replace with a real verdict screen">
       <div className="h-2 w-16 rounded-sm bg-border" />
       <div className="mt-2 rounded-md border border-border bg-card p-3">
         <div className="h-1.5 w-10 rounded-sm bg-border" />

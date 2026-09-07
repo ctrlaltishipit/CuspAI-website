@@ -16,7 +16,7 @@ const STEPS = [
   {
     n: "02",
     title: "Read what changed",
-    body: "Ninety seconds a day — a diff against what you already knew. Then it ends. Free forever.",
+    body: "Ninety seconds a day, covering only what changed since you last looked. Then it ends. Free forever.",
     shot: {
       src: "/screens/today-phone-light.webp",
       srcDark: "/screens/today-phone-dark.webp",

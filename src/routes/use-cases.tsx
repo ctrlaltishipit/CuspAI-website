@@ -7,13 +7,13 @@ import { WaitlistForm } from "@/components/waitlist-form";
 export const Route = createFileRoute("/use-cases")({
   head: () => ({
     meta: [
-      { title: "Use cases — one user, one week on CuspAI" },
+      { title: "Use cases: one user, one week on CuspAI" },
       {
         name: "description",
         content:
           "Follow Rahul Sharma, a product engineer in Bengaluru, from picking his interests to shipping a website with the tools CuspAI told him to use.",
       },
-      { property: "og:title", content: "Use cases — one user, one week on CuspAI" },
+      { property: "og:title", content: "Use cases: one user, one week on CuspAI" },
       {
         property: "og:description",
         content:
@@ -32,11 +32,11 @@ const steps = [
     kicker: "Signing up",
     title: "Rahul picks what he actually cares about.",
     body: [
-      "Rahul Sharma, 29, builds product at a Bengaluru fintech. On his first screen he does not choose a plan or a persona. He types what he follows — AI tools, emerging tech, model releases, funding in Indian AI — straight into the chat bar.",
+      "Rahul Sharma, 29, builds product at a Bengaluru fintech. On his first screen he does not choose a plan or a persona. He types what he follows straight into the chat bar: AI tools, emerging tech, model releases, funding in Indian AI.",
       "No checkboxes, no twenty-question onboarding. CuspAI reads the sentence, shows him the topics it heard, and lets him strike out the ones it got wrong.",
     ],
     slot: {
-      label: "Screenshot — picking your worlds",
+      label: "Screenshot: picking your worlds",
       src: "/screens/welcome-tall-light.webp",
       srcDark: "/screens/welcome-tall-dark.webp",
       alt: "CuspAI's first screen: \u201cWhat do you want to keep up with?\u201d, with the field and interest topics offered as chips and four already picked.",
@@ -51,16 +51,16 @@ const steps = [
     kicker: "The first open",
     title: "What lands is people and tools, not volume.",
     body: [
-      "Next morning Rahul opens CuspAI once. He gets the leading people worth reading on those four topics, the tools that shipped something real, and one line on what each is actually good for — plus what it costs in rupees.",
+      "Next morning Rahul opens CuspAI once. He gets the leading people worth reading on those four topics, the tools that shipped something real, and one line on what each is actually good for, plus what it costs in rupees.",
       "Anything that only made noise is missing on purpose. If a tool paid us and still failed, it goes on the Refusal List with the reason attached.",
     ],
     slot: {
-      label: "Screenshot — the day's read",
+      label: "Screenshot: the day's read",
       src: "/screens/today-tall-light.webp",
       srcDark: "/screens/today-tall-dark.webp",
-      alt: "The CuspAI reading surface: the topics being read across the top, then four items for the day, each with its source, its read time and the reason it surfaced.",
+      alt: "The CuspAI reading screen: the topics being read across the top, then four items for the day, each with its source, its read time and the reason it was chosen.",
       caption:
-        "The surface after sign-in. The day is dated and counted — four items, each naming its source, its length and the reason it reached you.",
+        "The first screen after sign-in. The day is dated and counted: four items, each naming its source, its length and the reason it reached you.",
       ratio: "phone" as const,
     },
     facts: ["Reads: 1 per day", "Items: 9 kept, 214 dropped"],
@@ -68,13 +68,13 @@ const steps = [
   {
     n: "03",
     kicker: "The chat box",
-    title: '"Build me a website — what should I use?"',
+    title: '"Build me a website. What should I use?"',
     body: [
-      "The chat box is always there. Rahul asks a loose question and CuspAI does not answer it blindly: it rewrites his prompt with the context a good answer needs — his stack, his budget, whether he wants to host it himself — and shows him that better prompt before it runs.",
+      "The chat box is always there. Rahul asks a loose question and CuspAI does not answer it blindly. It rewrites his prompt with the context a good answer needs, such as his stack, his budget and whether he wants to host it himself, then shows him that better prompt before it runs.",
       "He edits one word, sends it, and gets a shortlist of four tools in the order he should try them, with what each will cost him per month.",
     ],
     slot: {
-      label: "Screenshot — the stack CuspAI returns",
+      label: "Screenshot: the stack CuspAI returns",
       src: "/screens/stack-tall-light.webp",
       srcDark: "/screens/stack-tall-dark.webp",
       alt: "A stack CuspAI built from a one-line ask, split into a free track and a paid track, each tool showing its role, its cost and why it earned the slot.",
@@ -89,14 +89,14 @@ const steps = [
     kicker: "The week after",
     title: "He ships the site and keeps the loop.",
     body: [
-      "Rahul builds the site over a weekend using the top two tools on that list. On Wednesday, CuspAI tells him one of them shipped a change that affects his setup — and what to do about it in two sentences.",
+      "Rahul builds the site over a weekend using the top two tools on that list. On Wednesday, CuspAI tells him one of them shipped a change that affects his setup, and what to do about it in two sentences.",
       "When he is walking, he plays the audio version of the same thing. Same verdicts, no extra tab.",
     ],
     slot: {
-      label: "Screenshot — reading a single item",
+      label: "Screenshot: reading a single item",
       src: "/screens/read-tall-light.webp",
       srcDark: "/screens/read-tall-dark.webp",
-      alt: "A single CuspAI item opened: headline, source, read time, the reason it surfaced, then a condensed read of the argument.",
+      alt: "A single CuspAI item opened: headline, source, read time, the reason it was chosen, then a condensed read of the argument.",
       caption:
         "One item, opened. The reason it reached you stays attached to the piece \u2014 and once it's read, CuspAI doesn't show it to you again.",
       ratio: "phone" as const,
@@ -149,7 +149,7 @@ function UseCasesPage() {
 
           <Reveal delay={260}>
             <p className="mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground md:text-xl">
-              The whole journey, start to finish — what Rahul types, what CuspAI
+              The whole journey, start to finish: what Rahul types, what CuspAI
               shows him, and what he had built by Sunday.
             </p>
           </Reveal>
@@ -239,7 +239,7 @@ function UseCasesPage() {
                 <div className={`md:col-span-6 ${flip ? "md:order-1" : ""}`}>
                   <Reveal variant="scale" delay={80}>
                     <Parallax speed={flip ? 34 : 52}>
-                      <div className="glass-card relative flex justify-center rounded-2xl p-5 md:p-7">
+                      <div className="relative flex justify-center">
                         <div
                           className="pointer-events-none absolute inset-0 rounded-2xl opacity-60"
                           aria-hidden="true"
