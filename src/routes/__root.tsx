@@ -75,6 +75,19 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
+/**
+ * Google tags, both supplied at build time.
+ *
+ * These carry the VITE_ prefix on purpose, which is what makes Vite inline
+ * them into the browser bundle. That is the opposite of the rule for the
+ * Supabase keys: a Measurement ID and a Search Console token are public by
+ * design, printed in the page for Google to read, and neither grants access
+ * to anything. Leave either unset and the corresponding tag is simply not
+ * rendered, which is why local dev and preview builds report nothing.
+ */
+const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID;
+const GOOGLE_SITE_VERIFICATION = import.meta.env.VITE_GOOGLE_SITE_VERIFICATION;
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
@@ -90,6 +103,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:site_name", content: "CuspAI" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      ...(GOOGLE_SITE_VERIFICATION
+        ? [{ name: "google-site-verification", content: GOOGLE_SITE_VERIFICATION }]
+        : []),
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -110,6 +126,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         children: `try{if(localStorage.getItem("cusp-theme")==="dark")document.documentElement.classList.add("dark");}catch(e){}`,
       },
+      // Google Analytics 4. Route changes after the first load are counted by
+      // GA4's own enhanced measurement, which listens for History API pushes;
+      // TanStack Router navigates that way, so no manual page_view is needed.
+      ...(GA_MEASUREMENT_ID
+        ? [
+            {
+              src: `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`,
+              async: true,
+            },
+            {
+              children: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_MEASUREMENT_ID}');`,
+            },
+          ]
+        : []),
     ],
   }),
   shellComponent: RootShell,
