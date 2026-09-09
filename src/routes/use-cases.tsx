@@ -7,17 +7,17 @@ import { WaitlistForm } from "@/components/waitlist-form";
 export const Route = createFileRoute("/use-cases")({
   head: () => ({
     meta: [
-      { title: "Use cases: one user, one week on CuspAI" },
+      { title: "Use cases: four people, four fields" },
       {
         name: "description",
         content:
-          "Follow Rahul Sharma, a product engineer in Bengaluru, from picking his interests to shipping a website with the tools CuspAI told him to use.",
+          "An engineer, a sales lead, a hotel operations manager and a brand marketer. What each of them stopped doing once CuspAI told them what to use and what to skip.",
       },
-      { property: "og:title", content: "Use cases: one user, one week on CuspAI" },
+      { property: "og:title", content: "Use cases: four people, four fields" },
       {
         property: "og:description",
         content:
-          "A worked example: interests in, a working answer out. AI tools, emerging tech and the chat box that turns a vague ask into a decision.",
+          "Four worked examples across four fields, most of them not technical. Interests in, a working answer out, priced in rupees.",
       },
       { property: "og:type", content: "article" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -26,92 +26,141 @@ export const Route = createFileRoute("/use-cases")({
   component: UseCasesPage,
 });
 
-const steps = [
+const people = [
   {
     n: "01",
-    kicker: "Signing up",
-    title: "Rahul picks what he actually cares about.",
-    body: [
-      "Rahul Sharma, 29, builds product at a Bengaluru fintech. On his first screen he does not choose a plan or a persona. He types what he follows straight into the chat bar: AI tools, emerging tech, model releases, funding in Indian AI.",
-      "No checkboxes, no twenty-question onboarding. CuspAI reads the sentence, shows him the topics it heard, and lets him strike out the ones it got wrong.",
+    name: "Rahul Sharma",
+    meta: "29 · Product engineer · Bengaluru",
+    title: "He stopped paying for the second coding tool.",
+    interests: [
+      "AI coding tools",
+      "Model releases",
+      "Indian AI funding",
+      "Emerging tech",
+      "Football tactics",
+      "Home espresso",
     ],
-    slot: {
-      label: "Screenshot: picking your interests",
-      src: "/screens/welcome-tall-light.webp",
-      srcDark: "/screens/welcome-tall-dark.webp",
-      alt: "CuspAI's first screen: \u201cWhat do you want to keep up with?\u201d, with the industry and interest topics offered as chips and four already picked.",
-      caption:
-        "The first screen. Your industry and your interests, picked in one pass, and every item CuspAI later shows names which of them it came from.",
-      ratio: "phone" as const,
-    },
-    facts: ["Setup: under 60 seconds", "Topics: 4 typed, 0 chosen from a list"],
-  },
-  {
-    n: "02",
-    kicker: "The first open",
-    title: "What lands is people and tools, not volume.",
+    problem:
+      "Eleven newsletters, three Discord servers and a saved-posts folder he never reopened. He was current on none of it, and still could not decide whether a second AI coding subscription was worth ₹1,780 a month.",
     body: [
-      "Next morning Rahul opens CuspAI once. He gets the leading people worth reading on those four topics, the tools that shipped something real, and one line on what each is actually good for, plus what it costs in rupees.",
-      "Anything that only made noise is missing on purpose. If a tool paid us and still failed, it goes on the Refusal List with the reason attached.",
+      "He typed what he follows into the first screen and left it there. Next morning he got four things: two model releases that changed what his team could ship, one funding round that mattered to his roadmap, and a football piece for the walk home.",
+      "Then he asked the chat box a real question. Build me a marketing site, what should I use? It came back with a free track and a paid track for the same outcome, each tool carrying its cost in rupees and one line on why it earned the slot.",
     ],
-    slot: {
-      label: "Screenshot: the day's read",
-      src: "/screens/today-tall-light.webp",
-      srcDark: "/screens/today-tall-dark.webp",
-      alt: "The CuspAI reading screen: the topics being read across the top, then four items for the day, each with its source, its read time and the reason it was chosen.",
-      caption:
-        "The first screen after sign-in. The day is dated and counted: four items, each naming its source, its length and the reason it reached you.",
-      ratio: "phone" as const,
-    },
-    facts: ["Reads: 1 per day", "Items: 9 kept, 214 dropped"],
-  },
-  {
-    n: "03",
-    kicker: "The chat box",
-    title: '"Build me a website. What should I use?"',
-    body: [
-      "The chat box is always there. Rahul asks a loose question and CuspAI does not answer it blindly. It rewrites his prompt with the context a good answer needs, such as his stack, his budget and whether he wants to host it himself, then shows him that better prompt before it runs.",
-      "He edits one word, sends it, and gets a shortlist of four tools in the order he should try them, with what each will cost him per month.",
-    ],
+    gain: "He shipped the site over a weekend on the free track, and cancelled the subscription he had been renewing out of guilt.",
+    facts: ["Weekend to ship", "₹21,360 a year cancelled", "1 open a day"],
     slot: {
       label: "Screenshot: the stack CuspAI returns",
       src: "/screens/stack-tall-light.webp",
       srcDark: "/screens/stack-tall-dark.webp",
       alt: "A stack CuspAI built from a one-line ask, split into a free track and a paid track, each tool showing its role, its cost and why it earned the slot.",
       caption:
-        "The answer to one typed line. A free track and a paid track for the same outcome, every tool carrying its role, its cost and the reason it's there.",
+        "The answer to one typed line. A free track and a paid track for the same outcome, every tool carrying its role, its cost and the reason it is there.",
       ratio: "phone" as const,
     },
-    facts: ["Prompt rewritten: 1 tap", "Answer: 4 tools, ranked, ₹0–₹1,29,000/yr"],
+  },
+  {
+    n: "02",
+    name: "Meera Nair",
+    meta: "34 · Enterprise sales lead · Chennai",
+    title: "She knows sales. She did not know which tool to trust.",
+    interests: [
+      "B2B SaaS sales",
+      "AI for outreach",
+      "Pricing and packaging",
+      "Sales enablement",
+      "Long-distance running",
+      "Filter coffee",
+    ],
+    problem:
+      "Every recommendation she found was a listicle written by someone being paid to recommend it. Her team had already bought a tool nobody used, and she had no way to tell the next one apart from the last.",
+    body: [
+      "She is not technical and does not want to be. She opened Discover and asked what was actually moving in AI for outreach. She got three podcasts and two newsletters worth her commute, not the forty that would have shown up in a search.",
+      "Then she described her problem in one line: research an account properly before a first call, without adding another subscription. CuspAI built the workflow out of two tools her company already pays for and one free one, in the order to use them.",
+    ],
+    gain: "Account research went from most of an hour to about ten minutes, and the tool nobody used got cancelled with a reason she could show her finance team.",
+    facts: ["40 minutes to 10", "0 new subscriptions", "3 sources, not 40"],
+    slot: {
+      label: "Screenshot: Discover",
+      src: "/screens/discover-tall-light.webp",
+      srcDark: "/screens/discover-tall-dark.webp",
+      alt: "The CuspAI Discover screen: a short set of reads just outside the daily list, each naming the interest it belongs to, with the topics not yet picked shown below.",
+      caption:
+        "Discover, asked a direct question. A short answer for one interest, and it tells you when that is the whole set.",
+      ratio: "phone" as const,
+    },
+  },
+  {
+    n: "03",
+    name: "Faisal Rahman",
+    meta: "38 · Operations manager, hotel group · Goa",
+    title: "His industry does not have a feed. Now it does.",
+    interests: [
+      "Revenue management",
+      "Guest experience",
+      "Hospitality tech",
+      "Goan produce",
+      "Cooking",
+      "Travel photography",
+    ],
+    problem:
+      "Hospitality news moves through trade magazines, WhatsApp groups and conference corridors. Nothing arrives in one place, and the entire AI conversation felt like it was happening in an industry that was not his.",
+    body: [
+      "He picked his field and the things he cooks for pleasure on the same screen. The daily read now carries occupancy and pricing news alongside a piece on monsoon produce, each one naming which of his interests it came from.",
+      "He asked how to turn a year of guest feedback into something he could act on before the next season. He got three tools in order, two of them free, and the reason each was there. No code, no consultant.",
+    ],
+    gain: "He replaced a paid analytics add-on his group had been renewing, and now checks one place instead of four.",
+    facts: ["4 places to 1", "2 of 3 tools free", "No code written"],
+    slot: {
+      label: "Screenshot: the day's read",
+      src: "/screens/today-tall-light.webp",
+      srcDark: "/screens/today-tall-dark.webp",
+      alt: "The CuspAI daily read: a dated headline count, the interests being covered across the top, then a short list of items each with its source, its length and the reason it was chosen.",
+      caption:
+        "The day, dated and counted. Work and the things you read for pleasure in the same short list, each naming where it came from.",
+      ratio: "phone" as const,
+    },
   },
   {
     n: "04",
-    kicker: "The week after",
-    title: "He ships the site and keeps the loop.",
-    body: [
-      "Rahul builds the site over a weekend using the top two tools on that list. On Wednesday, CuspAI tells him one of them shipped a change that affects his setup, and what to do about it in two sentences.",
-      "When he is walking, he plays the audio version of the same thing. Same verdicts, no extra tab.",
+    name: "Ananya Iyer",
+    meta: "26 · Brand marketer · Mumbai",
+    title: "She did not want a new job. She wanted to be ready for this one.",
+    interests: [
+      "Performance marketing",
+      "AI video and image tools",
+      "D2C brand building",
+      "Indian consumer trends",
+      "Indie music",
+      "Sustainable fashion",
     ],
+    problem:
+      "Her founder asked why the brand was not making AI video yet. She did not want to switch careers or buy a ten-hour course. She wanted to be the person who could already do it, in the role she has.",
+    body: [
+      "The Gap screen named three skills for the job she is actually in, written as things to be able to do rather than a score or a progress ring. Each one says what would close it and what has not closed yet.",
+      "One of them closed in a fortnight, using a tool she found in her daily read and a free tier she did not know existed. The others are still open, and the screen says so plainly.",
+    ],
+    gain: "She shipped the brand's first AI video campaign without buying a course, and can name exactly what she still cannot do.",
+    facts: ["1 skill closed in 2 weeks", "₹0 on courses", "Named, not scored"],
     slot: {
-      label: "Screenshot: reading a single item",
-      src: "/screens/read-tall-light.webp",
-      srcDark: "/screens/read-tall-dark.webp",
-      alt: "A single CuspAI item opened: headline, source, read time, the reason it was chosen, then a condensed read of the argument.",
+      label: "Screenshot: the Gap",
+      src: "/screens/gap-tall-light.webp",
+      srcDark: "/screens/gap-tall-dark.webp",
+      alt: "The CuspAI Gap screen showing the distance to the role being aimed at as three named skills, each with its status and what would close it.",
       caption:
-        "One item, opened. The reason it reached you stays attached to the piece, and once it's read, CuspAI doesn't show it to you again.",
+        "The Gap, for the job you already have. Three named skills, each saying what closed it or what still has not.",
       ratio: "phone" as const,
     },
-    facts: ["Time to ship: 1 weekend", "Tabs open: 3"],
   },
 ];
 
 const ticker = [
-  "AI tools",
-  "Emerging tech",
-  "Model releases",
-  "Indian AI funding",
+  "AI coding tools",
+  "B2B sales",
+  "Revenue management",
+  "Performance marketing",
+  "Cooking",
+  "Indie music",
   "Prices in ₹",
-  "Audio verdicts",
   "Refusal List",
 ];
 
@@ -134,33 +183,34 @@ function UseCasesPage() {
           <Reveal variant="blur">
             <span className="inline-flex items-center gap-2 rounded-full border border-accent/25 bg-card/70 px-3 py-1.5 font-mono text-[10px] tracking-[0.14em] uppercase text-accent backdrop-blur md:text-[11px]">
               <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-              Use case 01 · Rahul Sharma, Bengaluru
+              Four people · Four fields · One place to look
             </span>
           </Reveal>
 
           <h1 className="mt-8 max-w-4xl font-display text-[2.6rem] leading-[1.04] tracking-tight text-balance md:text-7xl">
             <Reveal variant="mask" as="span" className="block">
-              One person, four interests,
+              Not everyone here
             </Reveal>
             <Reveal variant="mask" as="span" delay={140} className="block">
-              <span className="grad-text">one working answer.</span>
+              <span className="grad-text">works in tech.</span>
             </Reveal>
           </h1>
 
           <Reveal delay={260}>
             <p className="mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground md:text-xl">
-              The whole journey, start to finish: what Rahul types, what CuspAI
-              shows him, and what he had built by Sunday.
+              An engineer, a sales lead, a hotel operations manager and a brand
+              marketer. Same app, four different problems, and what each of them
+              stopped doing afterwards.
             </p>
           </Reveal>
 
           <Reveal delay={340}>
             <dl className="mt-12 grid max-w-3xl grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border md:grid-cols-4">
               {[
-                ["4", "topics typed"],
+                ["4", "fields, not one"],
                 ["1", "open per day"],
-                ["9", "items kept"],
-                ["1", "weekend to ship"],
+                ["6", "interests each"],
+                ["0", "extra tabs"],
               ].map(([v, k]) => (
                 <div key={k} className="bg-card/80 px-4 py-5 backdrop-blur">
                   <dt className="font-display text-3xl text-accent md:text-4xl">{v}</dt>
@@ -198,33 +248,66 @@ function UseCasesPage() {
         />
 
         <div className="space-y-24 md:space-y-40">
-          {steps.map((step, i) => {
+          {people.map((person, i) => {
             const flip = i % 2 === 1;
             return (
               <section
-                key={step.n}
+                key={person.n}
                 className="grid items-center gap-10 md:grid-cols-12 md:gap-16"
               >
                 <div className={`md:col-span-6 ${flip ? "md:order-2" : ""}`}>
                   <Reveal variant={flip ? "right" : "left"}>
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-baseline gap-4">
                       <span className="font-display text-5xl leading-none text-accent/25 md:text-6xl">
-                        {step.n}
+                        {person.n}
                       </span>
-                      <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted-foreground">
-                        {step.kicker}
+                      <span>
+                        <span className="block font-display text-xl tracking-tight md:text-2xl">
+                          {person.name}
+                        </span>
+                        <span className="mt-1 block font-mono text-[11px] tracking-[0.1em] uppercase text-muted-foreground">
+                          {person.meta}
+                        </span>
                       </span>
                     </div>
-                    <h2 className="mt-5 font-display text-3xl leading-tight tracking-tight text-balance md:text-[2.7rem]">
-                      {step.title}
+
+                    <ul className="mt-6 flex flex-wrap gap-2">
+                      {person.interests.map((interest) => (
+                        <li
+                          key={interest}
+                          className="rounded-full border border-border px-3 py-1 font-mono text-[10px] tracking-[0.06em] text-muted-foreground"
+                        >
+                          {interest}
+                        </li>
+                      ))}
+                    </ul>
+
+                    <h2 className="mt-7 font-display text-3xl leading-tight tracking-tight text-balance md:text-[2.5rem]">
+                      {person.title}
                     </h2>
-                    {step.body.map((p) => (
-                      <p key={p} className="mt-5 leading-relaxed text-muted-foreground">
-                        {p}
+
+                    <p className="mt-6 border-l-2 border-border pl-4 leading-relaxed text-muted-foreground">
+                      <span className="mb-1 block font-mono text-[10px] tracking-[0.14em] uppercase text-foreground/70">
+                        Before
+                      </span>
+                      {person.problem}
+                    </p>
+
+                    {person.body.map((paragraph) => (
+                      <p key={paragraph} className="mt-5 leading-relaxed text-muted-foreground">
+                        {paragraph}
                       </p>
                     ))}
+
+                    <p className="mt-6 border-l-2 border-accent pl-4 leading-relaxed text-foreground">
+                      <span className="mb-1 block font-mono text-[10px] tracking-[0.14em] uppercase text-accent">
+                        After
+                      </span>
+                      {person.gain}
+                    </p>
+
                     <ul className="mt-7 flex flex-wrap gap-2">
-                      {step.facts.map((f) => (
+                      {person.facts.map((f) => (
                         <li
                           key={f}
                           className="rounded-full border border-accent/20 bg-accent-tint px-3 py-1.5 font-mono text-[10px] tracking-[0.08em] text-foreground md:text-[11px]"
@@ -247,7 +330,7 @@ function UseCasesPage() {
                           <div className="orb -right-6 -top-8 h-32 w-32 bg-accent-2/40" />
                         </div>
                         <div className="relative w-full">
-                          <ScreenshotSlot {...step.slot} />
+                          <ScreenshotSlot {...person.slot} />
                         </div>
                       </div>
                     </Parallax>
@@ -267,8 +350,8 @@ function UseCasesPage() {
         <div className="relative mx-auto max-w-3xl px-5 text-center md:px-8">
           <Reveal variant="blur">
             <h2 className="font-display text-3xl tracking-tight text-balance md:text-5xl">
-              Your version of Rahul's week{" "}
-              <span className="grad-text">starts here.</span>
+              Your field is on that list{" "}
+              <span className="grad-text">too.</span>
             </h2>
             <p className="mx-auto mt-5 max-w-lg leading-relaxed text-muted-foreground">
               Tell us what you follow. We'll tell you what's worth your evening.

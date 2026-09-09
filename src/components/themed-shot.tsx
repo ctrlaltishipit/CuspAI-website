@@ -1,35 +1,33 @@
 type ThemedShotProps = {
   /** Screenshot captured with the product in light mode. */
   src: string;
-  /** The same screen captured in dark mode. Falls back to `src`. */
+  /** The same screen captured in dark mode. Preferred, see below. */
   srcDark?: string | undefined;
   alt: string;
   className?: string;
 };
 
 /**
- * A product screenshot that follows the site's theme.
+ * A product screenshot.
  *
- * Screenshots are raster, so one image would always fight the mode it wasn't
- * captured in. We ship both captures and let the `dark` class on <html> pick;
- * only the visible one is announced, the other is decorative.
+ * The site opens in light mode, and on a near-white page a light screenshot
+ * dissolves into the background: the phone stops reading as a device and the
+ * whole section goes flat. The dark capture is used in both themes instead,
+ * so the screen always reads as a screen. It is the one deliberate exception
+ * to the page following the visitor's theme.
  *
- * Sources live in `public/screens` — regenerate with
+ * Both captures still ship, and `src` is the fallback for any screen that has
+ * no dark version yet. Sources live in `public/screens`, regenerated with
  * `scripts/capture-screenshots.mjs`, which drives the product app directly.
  */
 export function ThemedShot({ src, srcDark, alt, className = "" }: ThemedShotProps) {
-  const base = `h-full w-full object-cover object-top ${className}`;
   return (
-    <>
-      <img src={src} alt={alt} loading="lazy" decoding="async" className={`${base} dark:hidden`} />
-      <img
-        src={srcDark ?? src}
-        alt=""
-        aria-hidden="true"
-        loading="lazy"
-        decoding="async"
-        className={`hidden ${base} dark:block`}
-      />
-    </>
+    <img
+      src={srcDark ?? src}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      className={`h-full w-full object-cover object-top ${className}`}
+    />
   );
 }
