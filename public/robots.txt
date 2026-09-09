@@ -14,3 +14,7 @@ User-agent: *
 Allow: /
 
 Sitemap: https://www.cuspai.io/sitemap.xml
+
+# The admin dashboard is not for search engines.
+User-agent: *
+Disallow: /admin
