@@ -20,3 +20,14 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+/**
+ * The Google tag, present only once <VITE_GA_MEASUREMENT_ID> is set and the
+ * loader has run. Always optional: every call site must tolerate its absence,
+ * because it is missing in dev, in preview builds, and for anyone running an
+ * ad blocker.
+ */
+interface Window {
+  gtag?: (command: string, eventName: string, params?: Record<string, unknown>) => void;
+  dataLayer?: unknown[];
+}

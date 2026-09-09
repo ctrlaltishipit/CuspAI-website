@@ -42,6 +42,12 @@ export const joinWaitlist = createServerFn({ method: "POST" })
         return { ok: false, reason: "unavailable" };
       }
 
+      // Awaited on purpose: the platform stops executing this function once a
+      // response is returned, so a detached request would never be delivered.
+      // It cannot throw, and it is capped by its own timeout.
+      const { sendWaitlistConfirmation } = await import("./waitlist-email");
+      await sendWaitlistConfirmation({ name: data.name, email: data.email });
+
       return { ok: true, alreadyJoined: false };
     } catch (error) {
       // Misconfiguration (missing env vars) or network trouble. Logged for us,

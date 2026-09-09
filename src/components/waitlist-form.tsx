@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { joinWaitlist } from "@/lib/waitlist";
+import { trackEvent } from "@/lib/analytics";
 
 type Status = "idle" | "empty" | "invalid" | "error" | "success";
 
@@ -43,6 +44,11 @@ export function WaitlistForm({ id, source }: { id: string; source?: string }) {
       if (result.ok) {
         setAlreadyJoined(result.alreadyJoined);
         setStatus("success");
+        // Only a genuinely new signup counts. Firing on a repeat submission
+        // would inflate the conversion number in Analytics.
+        if (!result.alreadyJoined) {
+          trackEvent("sign_up", { method: "waitlist", source: source ?? "unknown" });
+        }
       } else {
         setStatus(result.reason === "invalid" ? "invalid" : "error");
       }
