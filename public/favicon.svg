@@ -1,33 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="14 14 68 68"
-     role="img" aria-label="CuspAI">
-  <!-- The mark alone. The wordmark is unreadable at 16px, so the arcs carry the
-       brand here. Colours follow the browser's theme so the mark stays visible
-       on both a light and a dark tab strip. -->
-  <defs>
-    <linearGradient id="g-light" x1="22" y1="19" x2="77" y2="78" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#072f36"/>
-      <stop offset="0.52" stop-color="#0d4a53"/>
-      <stop offset="1" stop-color="#197785"/>
-    </linearGradient>
-    <linearGradient id="g-dark" x1="22" y1="19" x2="77" y2="78" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#2b8496"/>
-      <stop offset="0.52" stop-color="#4fb3c4"/>
-      <stop offset="1" stop-color="#7fd2de"/>
-    </linearGradient>
-    <style>
-      .arc { fill: none; stroke: url(#g-light); stroke-linecap: round; }
-      .dot { fill: #197785; }
-      @media (prefers-color-scheme: dark) {
-        .arc { stroke: url(#g-dark); }
-        .dot { fill: #7fd2de; }
-      }
-    </style>
-  </defs>
-  <g class="arc">
-    <path d="M 64.016 19.861 A 29 29 0 1 0 64.016 76.139" stroke-width="6.5"/>
-    <path d="M 62.322 26.653 A 22 22 0 1 0 62.322 69.347" stroke-width="4.75"/>
-    <path d="M 60.629 33.446 A 15 15 0 1 0 60.629 62.554" stroke-width="3.25"/>
-  </g>
-  <circle class="dot" cx="69" cy="48" r="7"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 108 108" role="img" aria-label="CuspAI">
+  <style>
+    .s{stroke:#0d4a53;stroke-width:6;stroke-linecap:round}.a{fill:#0d4a53}.b{fill:#0d4a53}.c{fill:#197785}
+    @media (prefers-color-scheme: dark){.s{stroke:#4fb3c4}.a{fill:#4fb3c4}.b{fill:#7fd2de}.c{fill:#2b8496}}
+  </style>
+  <g class="s"><line x1="56.5" y1="45" x2="30" y2="14.5"/><line x1="56.5" y1="45" x2="86" y2="14.5"/><line x1="56.5" y1="45" x2="88" y2="69"/><line x1="56.5" y1="45" x2="37" y2="86"/><line x1="56.5" y1="45" x2="11.5" y2="49"/></g>
+  <circle class="b" cx="30" cy="14.5" r="8.51"/><circle class="a" cx="86" cy="14.5" r="12.88"/><circle class="a" cx="88" cy="69" r="8.51"/><circle class="a" cx="37" cy="86" r="12.32"/><circle class="c" cx="11.5" cy="49" r="10.3"/>
+  <circle class="a" cx="56.5" cy="45" r="15.5"/>
 </svg>

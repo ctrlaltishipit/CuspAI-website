@@ -1,85 +1,178 @@
 /**
- * Regenerates `public/screens/*` from the Cusp product app.
+ * Regenerates `public/screens/*` from the CuspAI app, light and dark.
  *
- * Cusp is a mobile app, so every capture is taken at a phone viewport — the
- * site never shows a desktop browser view of it.
- *
- * Everything is driven through the app's own UI — sign in, generate a build,
- * flip the reading theme — so the images are real screens, not mock-ups. Each
- * screen is captured twice, light and dark, because <ThemedShot> serves the
- * capture that matches the visitor's theme.
+ * Every capture is the real app. The script exports the app for the web,
+ * signs in as the demo guest, and clicks through it the way a person would.
+ * Along the way it records where the controls sit, as fractions of the screen,
+ * so the guided demo on the site can aim its cursor and its zoom at them.
  *
  * Usage:
- *   1. npm i -D puppeteer-core                 (not a runtime dependency)
- *   2. in the Cusp app:  npm run dev -- --port 8099 --strictPort
- *   3. node scripts/capture-screenshots.mjs ./public/screens-png
+ *   1. npm i -D puppeteer-core                     (not a runtime dependency)
+ *   2. In the app repo, with Node 22:
+ *        npx expo export --platform web --output-dir /tmp/cuspai-web
+ *   3. node scripts/capture-screenshots.mjs /tmp/cuspai-web ./public/screens-png
  *   4. for f in public/screens-png/*.png; do \
- *        cwebp -lossless -z 9 "$f" -o "public/screens/$(basename "${f%.png}").webp"; done
+ *        cwebp -q 86 -m 6 -sharp_yuv "$f" -o "public/screens/$(basename "${f%.png}").webp"; done
+ *   5. Copy any changed numbers from public/screens-png/manifest.json into
+ *      `AT` in src/lib/tour-data.ts, then delete public/screens-png.
  *
- * Viewports below are cut to the exact aspect ratios the slots reserve, so the
- * captures drop in without cropping.
+ * Captures are 390 by 844 points at 3x, the shape <Phone> reserves, so they
+ * drop in without cropping. 3x matters: the plan map is zoomed on the site,
+ * and its labels are 9 points tall.
  */
 import puppeteer from "puppeteer-core";
-import { mkdir } from "node:fs/promises";
+import { createServer } from "node:http";
+import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
+import { extname, join, normalize } from "node:path";
 
-const BASE = "http://localhost:8099";
-const OUT = process.argv[2];
+const ROOT = process.argv[2];
+const OUT = process.argv[3];
+if (!ROOT || !OUT) {
+  console.error("usage: node scripts/capture-screenshots.mjs <expo web export dir> <output dir>");
+  process.exit(1);
+}
+
+const PORT = 8099;
+const BASE = `http://127.0.0.1:${PORT}`;
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-
-const PHONE = { width: 390, height: 823, deviceScaleFactor: 2 }; // 9/19 → <PhoneFrame>
-const TALL = { width: 390, height: 693, deviceScaleFactor: 2 }; // 9/16 → <ScreenshotSlot ratio="phone">
+const PHONE = { width: 390, height: 844, deviceScaleFactor: 3, isMobile: true, hasTouch: true };
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-/** Click the first element of `selector` whose text contains `text`. */
-async function clickByText(page, selector, text) {
-  const handle = await page.evaluateHandle(
-    (sel, txt) =>
-      [...document.querySelectorAll(sel)].find((el) => el.textContent.trim().includes(txt)),
-    selector,
-    text,
+/* ── A static server for the export: /route serves route.html ─────────────── */
+const TYPES = {
+  ".html": "text/html; charset=utf-8",
+  ".js": "text/javascript",
+  ".css": "text/css",
+  ".json": "application/json",
+  ".png": "image/png",
+  ".ico": "image/x-icon",
+  ".ttf": "font/ttf",
+};
+const isFile = async (p) => {
+  try {
+    return (await stat(p)).isFile();
+  } catch {
+    return false;
+  }
+};
+const server = createServer(async (req, res) => {
+  const rel = normalize(decodeURIComponent(new URL(req.url, BASE).pathname)).replace(
+    /^(\.\.[/\\])+/,
+    "",
   );
-  const el = handle.asElement();
-  if (!el) throw new Error(`No ${selector} containing "${text}"`);
+  let file = join(ROOT, rel);
+  if (!(await isFile(file))) {
+    const html = join(ROOT, rel.replace(/\/$/, "") + ".html");
+    file = (await isFile(html)) ? html : join(ROOT, "index.html");
+  }
+  res.writeHead(200, {
+    "content-type": TYPES[extname(file)] ?? "application/octet-stream",
+    "cache-control": "no-store",
+  });
+  res.end(await readFile(file));
+});
+await new Promise((r) => server.listen(PORT, "127.0.0.1", r));
+
+/* ── Finding and pressing controls ────────────────────────────────────────── */
+const ROLES = '[role="button"],[role="checkbox"],[role="tab"],[role="link"],a[href]';
+
+/** The smallest on-screen control whose text or label matches. */
+async function find(page, text, { exact = false, nth = 0 } = {}) {
+  const handle = await page.evaluateHandle(
+    (sel, t, ex, n) => {
+      const onScreen = (e) => {
+        const r = e.getBoundingClientRect();
+        return r.width > 0 && r.height > 0 && r.bottom > 0 && r.top < innerHeight;
+      };
+      const matches = (e) => {
+        const own = (e.textContent || "").trim();
+        const label = (e.getAttribute("aria-label") || "").trim();
+        return ex ? own === t || label === t : own.includes(t) || label.includes(t);
+      };
+      const byRole = [...document.querySelectorAll(sel)]
+        .filter(matches)
+        .filter(onScreen)
+        .sort((a, b) => (a.textContent || "").length - (b.textContent || "").length);
+      if (byRole[n]) return byRole[n];
+      // A Pressable with no role is a plain focusable div: find the text, climb to what is clickable.
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      const hits = [];
+      while (walker.nextNode()) {
+        const value = walker.currentNode.nodeValue.trim();
+        if (!(ex ? value === t : value.includes(t))) continue;
+        let e = walker.currentNode.parentElement;
+        while (
+          e &&
+          e !== document.body &&
+          !(e.hasAttribute("tabindex") || getComputedStyle(e).cursor === "pointer")
+        ) {
+          e = e.parentElement;
+        }
+        if (e && e !== document.body && onScreen(e)) hits.push(e);
+      }
+      return hits[n] ?? null;
+    },
+    ROLES,
+    text,
+    exact,
+    nth,
+  );
+  return handle.asElement();
+}
+
+async function tap(page, text, opts) {
+  const el = await find(page, text, opts);
+  if (!el) throw new Error(`No control "${text}" on ${page.url()}`);
   await el.click();
 }
 
-/**
- * The app is server-rendered, so markup lands before React attaches handlers and
- * an early click is silently dropped. Click until the page reaches `predicate`.
- */
-async function clickUntil(page, selector, text, predicate, label) {
-  for (let attempt = 1; attempt <= 10; attempt++) {
-    if (await page.evaluate(predicate)) return;
-    try {
-      await clickByText(page, selector, text);
-      await page.waitForFunction(predicate, { timeout: 2000 });
-      return;
-    } catch {
-      await sleep(500);
+const fraction = (b) => {
+  const r = (v) => Number(v.toFixed(4));
+  return {
+    x: r(b.x / PHONE.width),
+    y: r(b.y / PHONE.height),
+    w: r(b.width / PHONE.width),
+    h: r(b.height / PHONE.height),
+  };
+};
+
+/** Where a control sits, as fractions of the screen. */
+async function rectOf(page, text, opts) {
+  const el = await find(page, text, opts);
+  return el ? fraction(await el.boundingBox()) : null;
+}
+
+/** Where a piece of text sits, whatever it is inside. */
+async function rectOfText(page, text) {
+  const box = await page.evaluate((t) => {
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    while (walker.nextNode()) {
+      if (!walker.currentNode.nodeValue.includes(t)) continue;
+      const r = walker.currentNode.parentElement.getBoundingClientRect();
+      if (r.width > 0 && r.bottom > 0 && r.top < innerHeight) {
+        return { x: r.x, y: r.y, width: r.width, height: r.height };
+      }
     }
-  }
-  throw new Error(`"${text}" never reached ${label}`);
+    return null;
+  }, text);
+  return box ? fraction(box) : null;
 }
 
-/** Webfonts loaded and the app's 150ms colour transitions finished. */
-async function settle(page) {
-  await page.evaluate(() => document.fonts.ready);
-  await sleep(700);
-}
+const union = (rects) => {
+  const x1 = Math.min(...rects.map((r) => r.x));
+  const y1 = Math.min(...rects.map((r) => r.y));
+  const x2 = Math.max(...rects.map((r) => r.x + r.w));
+  const y2 = Math.max(...rects.map((r) => r.y + r.h));
+  const f = (v) => Number(v.toFixed(4));
+  return { x: f(x1), y: f(y1), w: f(x2 - x1), h: f(y2 - y1) };
+};
 
-async function shot(page, { name, path, viewport }) {
-  await page.setViewport(viewport);
-  if (path) await page.goto(BASE + path, { waitUntil: "networkidle2" });
-  await settle(page);
-  await page.screenshot({ path: `${OUT}/${name}.png`, captureBeyondViewport: false });
-  console.log("  ✓", name, `${viewport.width}×${viewport.height}`);
-}
-
-const isDark = () => document.documentElement.classList.contains("dark");
+/* ── The walk ─────────────────────────────────────────────────────────────── */
+const manifest = {};
 
 async function run(theme) {
-  console.log(`\n${theme}:`);
+  console.log(`\n${theme}`);
   const browser = await puppeteer.launch({
     executablePath: CHROME,
     headless: "new",
@@ -87,73 +180,122 @@ async function run(theme) {
     args: ["--hide-scrollbars", "--font-render-hinting=none"],
   });
   const page = await browser.newPage();
+  await page.emulateMediaFeatures([{ name: "prefers-color-scheme", value: theme }]);
+  // The app's own server refuses cross-origin calls from localhost. Failing
+  // them at once lets each screen settle on its built-in content.
+  await page.setRequestInterception(true);
+  page.on("request", (r) => (/vercel\.app\/api\//.test(r.url()) ? r.abort() : r.continue()));
 
-  // --- sign in exactly as a visitor would ---
-  await page.goto(BASE + "/signin", { waitUntil: "networkidle2" });
-  await settle(page);
-  // The signin effect races the button's own navigate(), so either landing spot
-  // is fine: leaving /signin is what proves the account exists.
-  await clickUntil(
-    page,
-    "button",
-    "Continue with Google",
-    () => location.pathname !== "/signin",
-    "a signed-in route",
+  const marks = (manifest[theme] = {});
+  const shot = async (name, wait = 600) => {
+    await page.evaluate(() => document.fonts.ready);
+    await sleep(wait);
+    await page.screenshot({ path: `${OUT}/${name}-${theme}.png` });
+    console.log("  ✓", name);
+  };
+  const mark = (screen, key, rect) => {
+    (marks[screen] ??= {})[key] = rect;
+    if (!rect) console.log(`  ! no position for ${screen}.${key}`);
+  };
+
+  await page.goto(BASE + "/", { waitUntil: "networkidle2" });
+  await sleep(4200); // the landing animation
+  // Pin the theme with the app's own toggle. Two presses land back on the
+  // starting theme, but stored, so a later full page load keeps it.
+  for (let i = 0; i < 2; i++) {
+    await tap(page, "reading mode");
+    await sleep(500);
+  }
+  await shot("landing", 900);
+
+  await tap(page, "Get started");
+  await sleep(1200);
+  await shot("signin");
+  await tap(page, "Continue as guest"); // the first-name field is prefilled with the demo persona
+  await sleep(1500);
+  await shot("interests");
+  await tap(page, "Next");
+  await sleep(1900);
+
+  // Build
+  await shot("build");
+  mark("build", "goal", await rectOf(page, "Build a website for my business"));
+  await tap(page, "Build a website for my business");
+  await sleep(800);
+  await shot("build-filled");
+  mark("build-filled", "buildPlan", await rectOf(page, "Build plan"));
+  await tap(page, "Build plan");
+  await sleep(2800);
+
+  // Plan
+  await shot("plan");
+  const tools = await page.evaluate(
+    (w, h) =>
+      [...document.querySelectorAll('[role="checkbox"]')].map((e) => {
+        const r = e.getBoundingClientRect();
+        return { x: r.x / w, y: r.y / h, w: r.width / w, h: r.height / h };
+      }),
+    PHONE.width,
+    PHONE.height,
   );
+  mark("plan", "map", union(tools));
+  mark("plan", "bestMix", await rectOf(page, "Best mix"));
+  await tap(page, "Best mix");
+  await sleep(1000);
+  await shot("plan-mix");
+  mark("plan-mix", "coverage", await rectOfText(page, "phases covered"));
 
-  await page.goto(BASE + "/welcome", { waitUntil: "networkidle2" });
-  await settle(page);
-
-  // --- flip the reading theme with the app's own toggle; the store persists it ---
-  if (theme === "dark") {
-    await clickUntil(page, "button", "Dark", isDark, "dark mode");
-    await settle(page);
+  const found = await page.evaluate(() => {
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    while (walker.nextNode()) {
+      if (/^your stack$/i.test(walker.currentNode.nodeValue.trim())) {
+        walker.currentNode.parentElement.scrollIntoView({ block: "start" });
+        return true;
+      }
+    }
+    return false;
+  });
+  if (found) {
+    await page.mouse.move(195, 400);
+    await page.mouse.wheel({ deltaY: -90 });
+    await sleep(700);
+    await shot("plan-stack");
   }
 
-  await shot(page, { name: `welcome-${theme}`, viewport: PHONE });
-  await shot(page, { name: `welcome-tall-${theme}`, viewport: TALL });
+  // Read and the reader
+  await tap(page, "Read", { exact: true });
+  await sleep(1700);
+  await shot("read");
+  mark("read", "readIt", await rectOfText(page, "Read it"));
+  mark("read", "reason", await rectOfText(page, "Because you follow"));
+  await tap(page, "Read it");
+  await sleep(1600);
+  await shot("reader");
+  await page.goBack();
+  await sleep(1200);
 
-  // --- generate a real stack so /build/$buildId has something to show ---
-  await page.setViewport(PHONE);
-  await page.goto(BASE + "/build", { waitUntil: "networkidle2" });
-  await settle(page);
-  await clickByText(page, "button", "A pattern set for showing when a model is unsure");
-  await sleep(300);
-  await clickUntil(
-    page,
-    "button",
-    "Build it",
-    () => /^\/build\/b/.test(location.pathname),
-    "a generated stack",
-  );
-  await settle(page);
+  // Discover, Skills, Saved
+  await tap(page, "Discover", { exact: true });
+  await sleep(1700);
+  await shot("discover");
+  await tap(page, "Skills", { exact: true });
+  await sleep(1700);
+  await shot("skills");
+  mark("skills", "skill", await rectOfText(page, "Writing evals before features"));
+  await tap(page, "Saved", { exact: true });
+  await sleep(1500);
+  await shot("saved");
 
-  // The two viewports share a width, so re-shooting at TALL only re-crops the
-  // height — no reflow, and no need to reload the route.
-  await shot(page, { name: `stack-${theme}`, viewport: PHONE });
-  await shot(page, { name: `stack-tall-${theme}`, viewport: TALL });
-  await shot(page, { name: `today-${theme}`, path: "/today", viewport: PHONE });
-  await shot(page, { name: `today-tall-${theme}`, viewport: TALL });
-  await shot(page, { name: `gap-${theme}`, path: "/gap", viewport: PHONE });
-  await shot(page, { name: `gap-tall-${theme}`, viewport: TALL });
-  await shot(page, { name: `read-tall-${theme}`, path: "/read/t1", viewport: TALL });
-  await shot(page, { name: `build-tall-${theme}`, path: "/build", viewport: TALL });
-  await shot(page, { name: `discover-tall-${theme}`, path: "/discover", viewport: TALL });
-
-  // /saved is empty until something is kept, so keep two pieces first.
-  await page.goto(BASE + "/today", { waitUntil: "networkidle2" });
-  await settle(page);
-  await page.evaluate(() => {
-    document
-      .querySelectorAll('button[aria-label^="Save "]')
-      .forEach((b, i) => i < 2 && b.click());
-  });
-  await sleep(400);
-  await shot(page, { name: `saved-tall-${theme}`, path: "/saved", viewport: TALL });
+  // Plans
+  await page.goto(BASE + "/upgrade", { waitUntil: "networkidle2" });
+  await sleep(1800);
+  await shot("plans");
 
   await browser.close();
 }
 
 await mkdir(OUT, { recursive: true });
-for (const theme of ["light", "dark"]) await run(theme);
-console.log("\ndone");
+for (const theme of ["dark", "light"]) await run(theme);
+await writeFile(`${OUT}/manifest.json`, JSON.stringify(manifest, null, 2));
+server.close();
+console.log(`\nDone. Control positions are in ${OUT}/manifest.json`);

@@ -32,9 +32,7 @@ function AdminPage() {
 }
 
 function Shell({ children }: { children: React.ReactNode }) {
-  return (
-    <main className="mx-auto max-w-6xl px-5 pt-28 pb-24 md:px-8 md:pt-36">{children}</main>
-  );
+  return <main className="mx-auto max-w-6xl px-5 pt-28 pb-24 md:px-8 md:pt-36">{children}</main>;
 }
 
 function Unconfigured() {
@@ -43,7 +41,9 @@ function Unconfigured() {
       <h1 className="font-display text-3xl tracking-tight md:text-4xl">Dashboard is sealed.</h1>
       <p className="mt-4 max-w-xl leading-relaxed text-muted-foreground">
         No admin passphrase is set, so there is nothing to log in to. Add an
-        <code className="mx-1 rounded bg-muted px-1.5 py-0.5 font-mono text-sm">ADMIN_PASSWORD</code>
+        <code className="mx-1 rounded bg-muted px-1.5 py-0.5 font-mono text-sm">
+          ADMIN_PASSWORD
+        </code>
         environment variable in Vercel and redeploy.
       </p>
     </Shell>
@@ -99,11 +99,7 @@ function LoginForm() {
             }}
             className={fieldClass}
           />
-          <button
-            type="submit"
-            disabled={pending}
-            className="btn-accent mt-3 w-full rounded-lg px-5 py-3 text-base font-medium disabled:opacity-60"
-          >
+          <button type="submit" disabled={pending} className="btn btn-primary mt-3 w-full">
             {pending ? "Checking…" : "Open dashboard"}
           </button>
           {failed && (
@@ -158,7 +154,7 @@ function Dashboard({ snapshot }: { snapshot: AdminSnapshot }) {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-display text-3xl tracking-tight md:text-4xl">Waitlist</h1>
-          <p className="mt-2 font-mono text-[11px] tracking-[0.1em] uppercase text-muted-foreground">
+          <p className="mt-2 font-medium text-[11px] tracking-[0.1em] uppercase text-muted-foreground">
             Everyone who asked for early access
           </p>
         </div>
@@ -191,7 +187,7 @@ function Dashboard({ snapshot }: { snapshot: AdminSnapshot }) {
           ["Sources", bySource.length],
         ].map(([label, value]) => (
           <div key={String(label)} className="bg-card px-4 py-5">
-            <dt className="font-mono text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
+            <dt className="font-medium text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
               {label}
             </dt>
             <dd className="mt-2 font-display text-3xl text-accent md:text-4xl">{value}</dd>
@@ -201,14 +197,14 @@ function Dashboard({ snapshot }: { snapshot: AdminSnapshot }) {
 
       {bySource.length > 0 && (
         <section className="mt-10">
-          <h2 className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted-foreground">
+          <h2 className="font-medium text-[11px] tracking-[0.14em] uppercase text-muted-foreground">
             Which form they used
           </h2>
           <ul className="mt-4 flex flex-wrap gap-2">
             {bySource.map(({ source, count }) => (
               <li
                 key={source}
-                className="rounded-full border border-accent/20 bg-accent-tint px-3 py-1.5 font-mono text-[11px] text-foreground"
+                className="rounded-full border border-accent/20 bg-accent-soft px-3 py-1.5 font-medium text-[11px] text-foreground"
               >
                 {source} · {count}
               </li>
@@ -218,7 +214,7 @@ function Dashboard({ snapshot }: { snapshot: AdminSnapshot }) {
       )}
 
       <section className="mt-10">
-        <h2 className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted-foreground">
+        <h2 className="font-medium text-[11px] tracking-[0.14em] uppercase text-muted-foreground">
           Signups
         </h2>
         {rows.length === 0 ? (
@@ -229,7 +225,7 @@ function Dashboard({ snapshot }: { snapshot: AdminSnapshot }) {
           <div className="mt-4 overflow-x-auto rounded-xl border border-border">
             <table className="w-full min-w-[680px] text-left text-sm">
               <thead className="bg-muted/60">
-                <tr className="font-mono text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
+                <tr className="font-medium text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
                   <th className="px-4 py-3 font-normal">Name</th>
                   <th className="px-4 py-3 font-normal">Email</th>
                   <th className="px-4 py-3 font-normal">What they do</th>
@@ -249,7 +245,7 @@ function Dashboard({ snapshot }: { snapshot: AdminSnapshot }) {
                         {row.email}
                       </a>
                     </td>
-                    <td className="px-4 py-3 text-muted-foreground">{row.role ?? "—"}</td>
+                    <td className="px-4 py-3 text-muted-foreground">{row.role ?? "Not given"}</td>
                     <td className="px-4 py-3 text-muted-foreground">{row.source ?? "unknown"}</td>
                     <td className="px-4 py-3 whitespace-nowrap text-muted-foreground">
                       {formatWhen(row.created_at)}

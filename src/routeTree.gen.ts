@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
+import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as UseCasesRouteImport } from './routes/use-cases'
@@ -37,6 +38,11 @@ const HowItWorksRoute = HowItWorksRouteImport.update({
   path: '/how-it-works',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/use-cases': typeof UseCasesRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/use-cases': typeof UseCasesRoute
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/use-cases': typeof UseCasesRoute
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/how-it-works'
+    | '/pricing'
     | '/privacy'
     | '/terms'
     | '/use-cases'
@@ -97,6 +107,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/how-it-works'
+    | '/pricing'
     | '/privacy'
     | '/terms'
     | '/use-cases'
@@ -106,6 +117,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/how-it-works'
+    | '/pricing'
     | '/privacy'
     | '/terms'
     | '/use-cases'
@@ -116,6 +128,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRoute
   HowItWorksRoute: typeof HowItWorksRoute
+  PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   TermsRoute: typeof TermsRoute
   UseCasesRoute: typeof UseCasesRoute
@@ -151,6 +164,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HowItWorksRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/privacy': {
       id: '/privacy'
       path: '/privacy'
@@ -180,6 +200,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AdminRoute: AdminRoute,
   HowItWorksRoute: HowItWorksRoute,
+  PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   TermsRoute: TermsRoute,
   UseCasesRoute: UseCasesRoute,

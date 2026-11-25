@@ -1,16 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Reveal } from "@/components/reveal";
-import { Eyebrow } from "@/components/typography";
-import { PaperGrid } from "@/components/marks";
-import { WaitlistForm } from "@/components/waitlist-form";
-import {
-  FiniteMark,
-  MissionMark,
-  NorthStarMark,
-  PriceMark,
-  ReasonMark,
-  VisionMark,
-} from "@/components/guide-marks";
+import { ArrowRight, CircleStop, Eye, Mail, MessageSquareText, Wallet } from "lucide-react";
+import { LogoMark } from "@/components/logo";
+import { PageHero } from "@/components/page-hero";
+import { Reveal, Spotlight } from "@/components/reveal";
+import { Accent, Eyebrow, SectionHead } from "@/components/typography";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -19,13 +12,13 @@ export const Route = createFileRoute("/about")({
       {
         name: "description",
         content:
-          "What CuspAI is, why it exists, and what we are actually trying to do: a daily read that ends and a verdict that commits, priced in rupees.",
+          "What CuspAI is, why we are building it, and the rules it is built to: a daily brief that ends, plans that show their costs, and reading that stays free.",
       },
       { property: "og:title", content: "About CuspAI" },
       {
         property: "og:description",
         content:
-          "A daily read that ends and a verdict that commits. Our vision, our mission, and the one number we judge ourselves on.",
+          "A daily brief that ends and a plan for whatever you want to build. What we are making, why, and how we judge it.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -36,268 +29,220 @@ export const Route = createFileRoute("/about")({
 
 const PRINCIPLES = [
   {
-    Mark: FiniteMark,
+    icon: CircleStop,
     title: "It ends",
-    body: "Every read has a last card. Three to five things, ninety seconds, then a line telling you that you are current. Nothing is waiting behind it.",
+    body: "The daily brief is a short list with a last item. When you reach it, the app tells you that you are up to date. Nothing is waiting behind it.",
   },
   {
-    Mark: ReasonMark,
-    title: "It shows its reasoning",
-    body: "Every item carries the reason it reached you: which of your interests it came from, and why it beat the things we dropped.",
+    icon: Eye,
+    title: "It shows its reasons",
+    body: "Every item says which of your interests brought it to you. Every tool in a plan says why it was chosen and where its free plan stops.",
   },
   {
-    Mark: PriceMark,
-    title: "It names a price",
-    body: "In rupees, with the date the price was checked. A recommendation without a number attached is an opinion, not a verdict.",
+    icon: Wallet,
+    title: "It names the cost",
+    body: "A plan shows the price of every tool and adds up your picks into a monthly total, so you know the bill before you start.",
   },
 ];
 
 const REASONS = [
   {
-    n: "01",
-    title: "You are drowning in tools, not short of them",
-    body: "There is no shortage of things you could use. There is a shortage of anyone willing to say which one, for your role, at your budget, this month. CuspAI picks one, names the runner-up, and tells you what to stop paying for.",
+    title: "There are too many tools, and too little advice on which to pick",
+    body: "There are plenty of tools. What is hard to find is someone willing to say which one, for this job, at this budget. A CuspAI plan gives you one free tool and one paid tool for every step, and lets you choose.",
   },
   {
-    n: "02",
-    title: "Volume is not value",
-    body: "A forty-item newsletter and an infinite feed both fail the same way: you finish neither, and you are no closer to a decision. We would rather send you four things you act on than four hundred you archive.",
+    title: "More to read does not mean more understood",
+    body: "A long newsletter and an endless feed fail the same way. You finish neither. We would rather hand you four things you read than four hundred you archive.",
   },
   {
-    n: "03",
-    title: "Prices here are rupee prices",
-    body: "Dollar pricing hides the real cost of a stack for someone paid in rupees. Every cost we publish is the number you will actually pay, with the date we checked it, because these prices move.",
+    title: "AI at work is no longer only for engineers",
+    body: "So the plans are written for beginners, with the exact link or command at every step, and the interests you can follow include food, film and sport next to data and design.",
   },
   {
-    n: "04",
-    title: "We tell you what not to buy",
-    body: "We publish what we declined to recommend and why, including tools that pay us a commission and that we still tell you to skip. A recommendation you can trust requires a refusal you can read.",
+    title: "Learning should be tied to a real job",
+    body: "A list of courses is easy to ignore. The skill map starts from the role you have and the one you want, and where a skill means making something, it sends you straight to a plan for it.",
   },
 ];
 
 function AboutPage() {
   return (
     <main>
-      {/* ---------------- Hero ---------------- */}
-      <section className="relative overflow-hidden pt-28 pb-16 md:pt-36 md:pb-24">
-        <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-          <div className="aurora absolute inset-0 opacity-70" />
-          <div className="orb left-[6%] top-[10%] h-56 w-56 bg-accent/35" />
-          <div
-            className="orb right-[8%] top-[30%] h-64 w-64 bg-accent-2/35"
-            style={{ animationDelay: "-7s" }}
-          />
-          <PaperGrid className="opacity-30" />
-        </div>
-
-        <div className="relative mx-auto max-w-4xl px-5 md:px-8">
-          <Reveal>
-            <Eyebrow>About CuspAI</Eyebrow>
-          </Reveal>
-          <h1 className="mt-6 font-display text-4xl leading-[1.05] tracking-tight text-balance md:text-6xl">
-            <Reveal variant="mask" as="span" className="block">
-              Everyone is selling you a tool.
-            </Reveal>
-            <Reveal variant="mask" as="span" delay={120} className="block">
-              Nobody is telling you <span className="grad-text">which one.</span>
-            </Reveal>
-          </h1>
-          <Reveal delay={200}>
-            <p className="mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground">
-              CuspAI is a daily read that ends and a verdict that commits. It tells you what
-              changed, what to use, and what to learn next. Every answer is dated, reasoned, and
-              priced in rupees.
-            </p>
-          </Reveal>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="About CuspAI"
+        lines={[
+          "Everyone is selling you a tool.",
+          <>
+            Very few will help you <Accent>choose one.</Accent>
+          </>,
+        ]}
+        lead="CuspAI is a phone app that keeps you current on the fields you follow, in two minutes a day, and turns what you want to build into a plan you can follow."
+      />
 
       {/* ---------------- What it is ---------------- */}
-      <section className="seam-top py-[72px] md:py-[110px]">
-        <div className="mx-auto max-w-4xl px-5 md:px-8">
-          <Reveal>
-            <Eyebrow>What CuspAI is</Eyebrow>
-            <h2 className="mt-5 max-w-2xl font-display text-3xl tracking-tight text-balance md:text-5xl">
-              A small, finite answer where everyone else ships an archive.
-            </h2>
+      <section className="hairline-t py-20 md:py-28">
+        <div className="mx-auto grid max-w-6xl gap-12 px-5 md:px-8 lg:grid-cols-12 lg:gap-16">
+          <Reveal className="lg:col-span-5">
+            <SectionHead
+              eyebrow="What it is"
+              title="A short answer, where most apps give you a long list."
+            />
           </Reveal>
-
-          <div className="mt-10 max-w-2xl space-y-6 text-lg leading-relaxed text-muted-foreground">
-            <Reveal delay={80}>
+          <div className="space-y-6 text-lg leading-relaxed text-muted-foreground lg:col-span-7">
+            <Reveal>
               <p>
-                Most products in this space hand you volume and call it value: an endless feed, a
-                long newsletter, an eighteen-month roadmap with nothing to do about it this week.
-                You finish none of them, and none of them leaves you with a decision.
+                Most products in this space hand you volume: an endless feed, a long newsletter, a
+                course catalogue. You finish none of them, and none of them leaves you knowing what
+                to do this week.
               </p>
             </Reveal>
-            <Reveal delay={140}>
-              <p>
-                CuspAI works the other way. Each morning it gives you the few things that genuinely
-                changed in the areas you follow, each one stating why it is in front of you. Then
-                it stops and tells you so. Nothing accumulates, and there is no backlog to feel
-                guilty about.
-              </p>
-            </Reveal>
-            <Reveal delay={200}>
-              <p>
-                When something needs deciding, you ask in one line. Which tool, which subscription
-                to cancel, what to learn for your role or before your next role. What comes back is
-                a pick, a runner-up, one thing to stop paying for, and the reasoning behind each,
-                with rupee costs and the date they were checked.
-              </p>
-            </Reveal>
-          </div>
-
-          <div className="mt-14 grid gap-4 md:mt-16 md:grid-cols-3 md:gap-5">
-            {PRINCIPLES.map(({ Mark, title, body }, i) => (
-              <Reveal key={title} delay={i * 90}>
-                <article className="card-lift flex h-full flex-col rounded-lg border border-border bg-card p-6 md:p-7">
-                  <Mark className="h-6 w-6 text-accent" />
-                  <h3 className="mt-5 font-display text-2xl tracking-tight">{title}</h3>
-                  <p className="mt-3 leading-relaxed text-muted-foreground">{body}</p>
-                </article>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ---------------- Why use it ---------------- */}
-      <section className="border-t border-border py-[72px] md:py-[110px]">
-        <div className="mx-auto max-w-4xl px-5 md:px-8">
-          <Reveal>
-            <Eyebrow>Why use CuspAI</Eyebrow>
-            <h2 className="mt-5 max-w-xl font-display text-3xl tracking-tight text-balance md:text-5xl">
-              Four reasons, and none of them is more content.
-            </h2>
-          </Reveal>
-
-          <div className="mt-12 divide-y divide-border border-t border-border md:mt-16">
-            {REASONS.map((r, i) => (
-              <Reveal key={r.n} delay={i * 70}>
-                <article className="grid gap-4 py-8 md:grid-cols-12 md:gap-10 md:py-10">
-                  <p className="font-mono text-[11px] tracking-[0.18em] text-accent md:col-span-2 md:text-xs">
-                    {r.n}
-                  </p>
-                  <div className="md:col-span-10">
-                    <h3 className="font-display text-2xl tracking-tight text-balance md:text-[1.75rem]">
-                      {r.title}
-                    </h3>
-                    <p className="mt-3 max-w-2xl leading-relaxed text-muted-foreground">{r.body}</p>
-                  </div>
-                </article>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ---------------- Vision / Mission / What we measure ---------------- */}
-      <section className="band-deep relative overflow-hidden bg-background py-[80px] text-foreground md:py-[130px]">
-        <PaperGrid className="opacity-20" />
-        <div className="relative mx-auto max-w-4xl px-5 md:px-8">
-          <Reveal>
-            <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted-foreground md:text-xs">
-              Where this is going
-            </p>
-          </Reveal>
-
-          <div className="mt-12 space-y-12 md:mt-16 md:space-y-16">
             <Reveal delay={60}>
-              <article className="grid gap-5 md:grid-cols-12 md:gap-10">
-                <div className="md:col-span-3">
-                  <VisionMark className="h-7 w-7 text-accent-2" />
-                  <p className="mt-4 font-mono text-[11px] tracking-[0.14em] uppercase text-muted-foreground md:text-xs">
-                    Vision
-                  </p>
-                </div>
-                <div className="md:col-span-9">
-                  <h2 className="font-display text-2xl leading-snug tracking-tight text-balance md:text-[2.1rem]">
-                    Nobody good at their job should have to guess what is worth their evening.
-                  </h2>
-                  <p className="mt-4 max-w-xl leading-relaxed text-muted-foreground">
-                    Careers now turn on tooling decisions made with bad information, under time
-                    pressure, by people with no way to tell a genuine shift from marketing. We want
-                    the honest answer to be the easy one to find.
-                  </p>
-                </div>
-              </article>
+              <p>
+                CuspAI works the other way. Each day it gives you the few things that changed in the
+                areas you follow, and each one says why it is in front of you. Then the list ends,
+                and the app says so.
+              </p>
             </Reveal>
-
             <Reveal delay={120}>
-              <article className="grid gap-5 md:grid-cols-12 md:gap-10">
-                <div className="md:col-span-3">
-                  <MissionMark className="h-7 w-7 text-accent-2" />
-                  <p className="mt-4 font-mono text-[11px] tracking-[0.14em] uppercase text-muted-foreground md:text-xs">
-                    Mission
-                  </p>
-                </div>
-                <div className="md:col-span-9">
-                  <h2 className="font-display text-2xl leading-snug tracking-tight text-balance md:text-[2.1rem]">
-                    Turn what changed into what to do, in under two minutes a day.
-                  </h2>
-                  <p className="mt-4 max-w-xl leading-relaxed text-muted-foreground">
-                    Read the fields our members work in, drop everything that only made noise, and
-                    hand back the few things that move a decision, each with its reasoning, its
-                    rupee price, and the date it was checked.
-                  </p>
-                </div>
-              </article>
+              <p>
+                When you want to make something, you say it in a line. You get the steps in order, a
+                free tool and a paid tool for each, real prices, and a playbook written for someone
+                doing it for the first time.
+              </p>
             </Reveal>
+          </div>
+        </div>
 
-            <Reveal delay={180}>
-              <article className="grid gap-5 md:grid-cols-12 md:gap-10">
-                <div className="md:col-span-3">
-                  <NorthStarMark className="h-7 w-7 text-accent-2" />
-                  <p className="mt-4 font-mono text-[11px] tracking-[0.14em] uppercase text-muted-foreground md:text-xs">
-                    What we measure
-                  </p>
-                </div>
-                <div className="md:col-span-9">
-                  <h2 className="font-display text-2xl leading-snug tracking-tight text-balance md:text-[2.1rem]">
-                    Decisions taken and kept.
-                  </h2>
-                  <p className="mt-4 max-w-xl leading-relaxed text-muted-foreground">
-                    Opens, minutes read and subscriber count all climb when we waste your time, so
-                    none of them tell us anything. The number we judge ourselves on is how many
-                    members acted on a verdict and were still glad they did ninety days later.
-                  </p>
-                  <p className="mt-5 font-mono text-[11px] leading-relaxed tracking-[0.06em] text-muted-foreground md:text-xs">
-                    If that number falls, the product is wrong, however good everything else looks.
-                  </p>
-                </div>
-              </article>
+        <div className="mx-auto mt-16 grid max-w-6xl gap-5 px-5 md:grid-cols-3 md:px-8">
+          {PRINCIPLES.map(({ icon: Icon, title, body }, i) => (
+            <Reveal key={title} delay={i * 60} className="h-full">
+              <Spotlight as="article" className="card card-hover h-full p-6 md:p-7">
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-soft text-accent-text">
+                  <Icon size={22} strokeWidth={1.75} aria-hidden="true" />
+                </span>
+                <h3 className="t-h3 mt-5">{title}</h3>
+                <p className="mt-3 leading-relaxed text-muted-foreground">{body}</p>
+              </Spotlight>
             </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* ---------------- Why ---------------- */}
+      <section className="hairline-t bg-band py-20 md:py-28">
+        <div className="mx-auto max-w-6xl px-5 md:px-8">
+          <Reveal>
+            <SectionHead
+              eyebrow="Why we are building it"
+              title="Four things we kept running into."
+            />
+          </Reveal>
+          <ol className="mt-12 md:mt-16">
+            {REASONS.map((r, i) => (
+              <Reveal as="li" key={r.title} delay={i * 50}>
+                <article className="grid gap-4 border-t border-border py-9 md:grid-cols-12 md:gap-10 md:py-11">
+                  <p className="tnum font-display text-sm text-accent-text md:col-span-1">
+                    {String(i + 1).padStart(2, "0")}
+                  </p>
+                  <h3 className="t-h3 md:col-span-5">{r.title}</h3>
+                  <p className="leading-relaxed text-muted-foreground md:col-span-6">{r.body}</p>
+                </article>
+              </Reveal>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* ---------------- Where this is going ---------------- */}
+      <section className="dark relative overflow-hidden bg-deep py-20 text-foreground md:py-28">
+        <div className="glow-centre pointer-events-none absolute inset-0" aria-hidden="true" />
+        <div className="relative mx-auto max-w-6xl px-5 md:px-8">
+          <Reveal>
+            <LogoMark className="h-12 w-12" />
+            <div className="mt-6">
+              <Eyebrow>Where this is going</Eyebrow>
+            </div>
+          </Reveal>
+
+          <div className="mt-10 grid gap-12 md:grid-cols-3 md:gap-10">
+            {[
+              {
+                label: "Vision",
+                title: "Nobody good at their job should have to guess what is worth their evening.",
+                body: "Careers now turn on choices about tools, made in a hurry and with poor information. We want the clear answer to be the easy one to find.",
+              },
+              {
+                label: "Mission",
+                title: "Turn what changed into what to do, in two minutes a day.",
+                body: "Read the fields people work in, keep the few things that matter, and give each person a plan for the thing they want to build next.",
+              },
+              {
+                label: "What we measure",
+                title: "Plans started, and things finished.",
+                body: "Time spent in the app goes up when we waste your time, so we don't count it as success. We look at how many people start a plan and how many say they finished what they set out to build.",
+              },
+            ].map((x, i) => (
+              <Reveal key={x.label} delay={i * 70}>
+                <article className="border-t border-border pt-6">
+                  <p className="text-sm font-semibold text-accent-text">{x.label}</p>
+                  <h2 className="mt-3 font-display text-2xl leading-snug tracking-tight">
+                    {x.title}
+                  </h2>
+                  <p className="mt-4 leading-relaxed text-muted-foreground">{x.body}</p>
+                </article>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ---------------- CTA ---------------- */}
-      <section className="relative overflow-hidden border-t border-border py-20 md:py-28">
-        <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-          <div className="aurora absolute inset-0 opacity-80" />
-        </div>
-        <div className="relative mx-auto max-w-3xl px-5 text-center md:px-8">
-          <Reveal variant="blur">
-            <h2 className="font-display text-3xl tracking-tight text-balance md:text-5xl">
-              Tell us what you follow.
-            </h2>
-            <p className="mx-auto mt-5 max-w-lg leading-relaxed text-muted-foreground">
-              We'll tell you what's worth your evening, and what to stop paying for.
-            </p>
+      {/* ---------------- Contact ---------------- */}
+      <section id="contact" className="scroll-mt-24 py-20 md:py-28">
+        <div className="mx-auto grid max-w-6xl gap-10 px-5 md:px-8 lg:grid-cols-12 lg:gap-16">
+          <Reveal className="lg:col-span-5">
+            <SectionHead
+              eyebrow="Contact"
+              title="Write to us."
+              lead="CuspAI is made in Bengaluru. Every message to this address reaches a person."
+            />
           </Reveal>
-          <Reveal delay={120}>
-            <div className="glass-card mx-auto mt-9 max-w-xl rounded-2xl p-5 text-left md:p-6">
-              <WaitlistForm id="email-about" source="about" />
-            </div>
-            <p className="mt-6 font-mono text-[11px] tracking-[0.08em] text-muted-foreground md:text-xs">
-              Or see{" "}
-              <Link to="/how-it-works" className="link-underline text-foreground">
-                how it works
-              </Link>{" "}
-              first.
-            </p>
-          </Reveal>
+          <div className="grid gap-5 sm:grid-cols-2 lg:col-span-7">
+            <Reveal>
+              <a href="mailto:hello@cuspai.io" className="card card-hover group block h-full p-6">
+                <Mail
+                  size={22}
+                  strokeWidth={1.75}
+                  aria-hidden="true"
+                  className="text-accent-text"
+                />
+                <h3 className="mt-4 font-display text-xl tracking-tight">Email</h3>
+                <p className="mt-1 text-muted-foreground">
+                  Questions, press, or a problem with the site.
+                </p>
+                <p className="mt-4 inline-flex items-center gap-2 font-semibold">
+                  hello@cuspai.io
+                  <ArrowRight size={18} aria-hidden="true" className="arrow text-accent-text" />
+                </p>
+              </a>
+            </Reveal>
+            <Reveal delay={60}>
+              <Link to="/privacy" className="card card-hover group block h-full p-6">
+                <MessageSquareText
+                  size={22}
+                  strokeWidth={1.75}
+                  aria-hidden="true"
+                  className="text-accent-text"
+                />
+                <h3 className="mt-4 font-display text-xl tracking-tight">Your data</h3>
+                <p className="mt-1 text-muted-foreground">
+                  Ask to see, correct or delete what we hold about you.
+                </p>
+                <p className="mt-4 inline-flex items-center gap-2 font-semibold">
+                  Read the Privacy Policy
+                  <ArrowRight size={18} aria-hidden="true" className="arrow text-accent-text" />
+                </p>
+              </Link>
+            </Reveal>
+          </div>
         </div>
       </section>
     </main>

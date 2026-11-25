@@ -1,10 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Reveal, Parallax } from "@/components/reveal";
-import { Eyebrow } from "@/components/typography";
-import { PaperGrid } from "@/components/marks";
-import { ScreenshotSlot } from "@/components/screenshot-slot";
-import { WaitlistForm } from "@/components/waitlist-form";
-import { LoopDiagram, SurfaceIcon, type SurfaceKey } from "@/components/guide-marks";
+import {
+  ArrowRight,
+  BarChart3,
+  Bookmark,
+  FileText,
+  Layers,
+  Search,
+  type LucideIcon,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { PageHero } from "@/components/page-hero";
+import { Phone, Shot, type ShotName } from "@/components/phone";
+import { Reveal } from "@/components/reveal";
+import { SectionHead } from "@/components/typography";
 
 export const Route = createFileRoute("/how-it-works")({
   head: () => ({
@@ -13,13 +21,13 @@ export const Route = createFileRoute("/how-it-works")({
       {
         name: "description",
         content:
-          "A guide to the CuspAI app: the daily loop, what each of the five screens does, and what is free versus paid.",
+          "A walk through the CuspAI app: how you start, what each of the five tabs does, and when you would open it. With screenshots of every screen.",
       },
       { property: "og:title", content: "How CuspAI works" },
       {
         property: "og:description",
         content:
-          "Every screen in the CuspAI app, what it does, and when you'd open it. With screenshots.",
+          "Every screen in the CuspAI app, what it does, and when you would open it. With screenshots.",
       },
       { property: "og:type", content: "article" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -28,401 +36,329 @@ export const Route = createFileRoute("/how-it-works")({
   component: HowItWorksPage,
 });
 
-const START = [
+const START: {
+  n: string;
+  title: string;
+  body: string;
+  note: string;
+  shot: ShotName;
+  alt: string;
+}[] = [
   {
     n: "01",
-    title: "Pick your interests",
-    body: "Choose the industry you work in and the things you enjoy outside it. There is no twenty-question sign-up and no plan to choose: the picks are the whole setup, and you can change them any time.",
-    shot: {
-      label: "Screenshot: picking your interests",
-      src: "/screens/welcome-tall-light.webp",
-      srcDark: "/screens/welcome-tall-dark.webp",
-      alt: "The CuspAI setup screen asking what you want to keep up with, with industry and interest topics offered as chips.",
-    },
-    note: "Under 60 seconds",
+    title: "Open it and go in",
+    body: "The first screen tells you what the app does. Tap Get started, then continue as a guest with only a first name.",
+    note: "No account needed",
+    shot: "signin",
+    alt: "The CuspAI sign-in screen, with Continue with Google and a guest option that asks only for a first name.",
   },
   {
     n: "02",
-    title: "Read the day",
-    body: "Next morning you get a short, dated list: the few things that changed in those areas. Each one names its source, its length, and the reason it reached you. At the bottom is a card telling you that you're current.",
-    shot: {
-      label: "Screenshot: the day's read",
-      src: "/screens/today-tall-light.webp",
-      srcDark: "/screens/today-tall-dark.webp",
-      alt: "The CuspAI daily read: a dated headline count, topic chips, then items each carrying the reason it was chosen.",
-    },
-    note: "About 90 seconds",
+    title: "Pick what to follow",
+    body: "Choose from eighteen topics across work, life and ideas, then add your own. Your daily brief is built from these, and you can change them at any time.",
+    note: "About a minute",
+    shot: "interests",
+    alt: "The CuspAI interests screen: topic chips grouped under Work, Life and Ideas, with eight picked.",
   },
   {
     n: "03",
-    title: "Ask for a stack",
-    body: "When you need to decide something, describe it in one line, typed or spoken. CuspAI comes back with the tools, the order to try them in, and the reading behind each choice.",
-    shot: {
-      label: "Screenshot: the Build screen",
-      src: "/screens/build-tall-light.webp",
-      srcDark: "/screens/build-tall-dark.webp",
-      alt: "The CuspAI Build screen asking what you want to build, with a text field, a dictate button and example prompts.",
-    },
-    note: "One line in",
+    title: "Start with a goal or a read",
+    body: "You land on Build. Type what you want to make, or tap Read at the bottom for today's brief. Both are ready the moment you arrive.",
+    note: "You are in",
+    shot: "build",
+    alt: "The CuspAI Build screen: a greeting, a box to describe what you want to build, and a list of common goals.",
   },
 ];
 
-const SURFACES: {
-  key: SurfaceKey;
+const TABS: {
+  id: string;
+  icon: LucideIcon;
   name: string;
   when: string;
   body: string;
   points: string[];
-  shot: { label: string; src: string; srcDark: string; alt: string };
+  shot: ShotName;
+  alt: string;
 }[] = [
   {
-    key: "build",
+    id: "build",
+    icon: Layers,
     name: "Build",
-    when: "When you need to decide",
-    body: "The answer to a one-line ask, split into a free track and a paid track for the same outcome. Every tool carries its role, its cost and the reason it earned the slot. Then come the steps in order, and the thing you end up with.",
+    when: "When you want to make something",
+    body: "Describe your goal in a line, or tap one of twelve common ones: a website, a newsletter, a YouTube channel, more sales leads, an online shop. A plan opens straight away.",
     points: [
-      "Free track and paid track side by side",
-      "A reason on every tool, not just a ranking",
-      "Numbered steps you can tick off",
+      "Twelve common goals, one tap each",
+      "Your earlier plans are listed underneath",
+      "Three plans to try before you pay anything",
     ],
-    shot: {
-      label: "Screenshot: a generated stack",
-      src: "/screens/stack-tall-light.webp",
-      srcDark: "/screens/stack-tall-dark.webp",
-      alt: "A CuspAI stack: free and paid tracks, each tool showing its role, its cost and why it was chosen.",
-    },
+    shot: "build-filled",
+    alt: "The Build screen with the goal Build a website for my business filled in, and the Build plan button ready.",
   },
   {
-    key: "today",
-    name: "Today",
-    when: "Once each morning",
-    body: "The finite daily read. Open an item and you get a condensed version of the argument with the reason still attached at the top. Once you've read it, CuspAI won't show it to you again.",
+    id: "plan",
+    icon: Layers,
+    name: "Your plan",
+    when: "Straight after you ask for one",
+    body: "The whole job on one map. Your goal sits at the top, the steps run down the middle, free tools are on the left and paid tools on the right. Every tool shows its price.",
     points: [
-      "Three to five items, then it ends",
-      "Every item states which of your interests it came from",
-      "Read once, never re-served",
+      "Tap a tool to pick it, and hold it to read about it",
+      "All free, Best mix or All paid in one tap",
+      "A line under the map checks every step has a tool",
+      "It adds up what your picks cost a month",
     ],
-    shot: {
-      label: "Screenshot: reading an item",
-      src: "/screens/read-tall-light.webp",
-      srcDark: "/screens/read-tall-dark.webp",
-      alt: "A single CuspAI item opened: headline, source, read time, the reason it was chosen, then a condensed read.",
-    },
+    shot: "plan-mix",
+    alt: "A CuspAI plan for building a website: four steps down a spine, free tools on the left and paid tools on the right, with the Best mix picks lit up.",
   },
   {
-    key: "discover",
+    id: "playbook",
+    icon: FileText,
+    name: "The playbook",
+    when: "When you are ready to start",
+    body: "Under the map are the steps to follow, written for a beginner, with the exact link or command for each. Your stack lists the tools you picked. On Starter and Pro you can save all of it as an A4 PDF.",
+    points: [
+      "Numbered steps with commands you can copy",
+      "A checklist for running the plan",
+      "Your stack, with the monthly total",
+    ],
+    shot: "plan-stack",
+    alt: "The lower half of a CuspAI plan: the free and paid tracks as checklists, and Your stack listing the picked tools with a monthly total.",
+  },
+  {
+    id: "read",
+    icon: FileText,
+    name: "Read",
+    when: "Once a day, whenever suits you",
+    body: "A short, numbered list of what changed in the fields you follow. Each item has up to three points and the reason it reached you. After the last one, the app tells you that you are up to date.",
+    points: [
+      "About two minutes to read it all",
+      "Read it opens a short version, with a link to the original",
+      "Get notified sets one reminder a day, at 8:00",
+    ],
+    shot: "read",
+    alt: "The CuspAI Read screen: four things worth knowing today, each with a headline, short points, its source and the reason it was chosen.",
+  },
+  {
+    id: "discover",
+    icon: Search,
     name: "Discover",
-    when: "When you have five spare minutes",
-    body: "A small set of pieces just outside your daily read, picked for how closely they sit to what you already follow, plus the areas of interest you have not chosen yet. Adding one changes tomorrow's read, not today's.",
+    when: "When you have a few spare minutes",
+    body: "The top three newsletters and podcast episodes for what you follow. Narrow it to one interest, search, or switch between newsletters and podcasts.",
     points: [
-      "Chosen for how close they sit, never for trending",
-      "Still finite: it tells you when that's the whole set",
-      "Add an interest and tomorrow shifts",
+      "Each one shows its source, its age and how long it takes",
+      "Two short points and the reason it was picked",
+      "Read or Listen opens the original",
     ],
-    shot: {
-      label: "Screenshot: Discover",
-      src: "/screens/discover-tall-light.webp",
-      srcDark: "/screens/discover-tall-dark.webp",
-      alt: "The CuspAI Discover screen: nearby reads outside the daily list, and the topics not yet picked.",
-    },
+    shot: "discover",
+    alt: "The CuspAI Discover screen: a search box, interest chips, a filter for newsletters and podcasts, and the first newsletter in the list.",
   },
   {
-    key: "gap",
-    name: "Gap",
-    when: "When you're planning a move",
-    body: "The distance between the work you do now and the role you're aiming at, written as a handful of named skills, with no score and no progress ring. Each one says what closed it or what still hasn't.",
+    id: "skills",
+    icon: BarChart3,
+    name: "Skills",
+    when: "When you are planning your next move",
+    body: "Enter the role you have and the role you want. You get four to six skills that sit between them, why each one matters, and numbered steps to get there.",
     points: [
-      "Named plainly, never scored out of ten",
-      "Marked open, closing, or already yours",
-      "Moves when your reading does",
+      "Mark each skill Not started, In progress or Got it",
+      "What you have read on a skill counts as progress",
+      "Where a skill means making something, one tap sends it to Build",
     ],
-    shot: {
-      label: "Screenshot: the Gap",
-      src: "/screens/gap-tall-light.webp",
-      srcDark: "/screens/gap-tall-dark.webp",
-      alt: "The CuspAI Gap screen showing the move from one role to another as three named skills with their status.",
-    },
+    shot: "skills",
+    alt: "The CuspAI Skills screen for moving from product manager to AI product manager: a skill with a progress bar, why it matters, and what has been read on it.",
   },
   {
-    key: "saved",
+    id: "saved",
+    icon: Bookmark,
     name: "Saved",
     when: "When something is worth keeping",
-    body: "A short shelf of what you kept. Every piece still carries the reason it reached you in the first place, so a thing you saved in March still explains itself in June.",
-    points: ["One tap from any item", "Reasons stay attached", "A shelf, not another inbox"],
-    shot: {
-      label: "Screenshot: Saved",
-      src: "/screens/saved-tall-light.webp",
-      srcDark: "/screens/saved-tall-dark.webp",
-      alt: "The CuspAI Saved screen listing the pieces kept, each still showing the reason it was chosen.",
-    },
+    body: "One tap on any item saves it here. Each saved item still shows the reason it reached you, so it makes sense when you come back to it weeks later.",
+    points: ["Save from Read, Discover or the reader", "Tap again to remove it"],
+    shot: "saved",
+    alt: "The CuspAI Saved screen with three saved items, each showing its source and the reason it was chosen.",
   },
 ];
+
+/**
+ * The tabs, one after another. On a wide screen the phone stays put on the
+ * right and changes as each tab's text reaches the middle of the window. On a
+ * small screen each tab simply carries its own phone.
+ */
+function Walkthrough() {
+  const [active, setActive] = useState(0);
+  const items = useRef<(HTMLElement | null)[]>([]);
+
+  useEffect(() => {
+    if (typeof IntersectionObserver === "undefined") return;
+    // A thin band across the middle of the window: whichever tab crosses it is the one shown.
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) setActive(Number((e.target as HTMLElement).dataset["i"]));
+        }
+      },
+      { rootMargin: "-45% 0px -45% 0px" },
+    );
+    items.current.forEach((el) => el && io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
+      <div className="lg:col-span-6">
+        {TABS.map((t, i) => (
+          <article
+            key={t.id}
+            id={t.id}
+            ref={(el) => {
+              items.current[i] = el;
+            }}
+            data-i={i}
+            className={`scroll-mt-24 border-t border-border py-12 transition-opacity duration-300 first:border-t-0 first:pt-0 lg:flex lg:min-h-[78vh] lg:flex-col lg:justify-center lg:py-16 ${
+              active === i ? "lg:opacity-100" : "lg:opacity-45"
+            }`}
+          >
+            <div className="flex items-center gap-4">
+              <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-soft text-accent-text">
+                <t.icon size={22} strokeWidth={1.75} aria-hidden="true" />
+              </span>
+              <div>
+                <h3 className="t-h3">{t.name}</h3>
+                <p className="text-sm font-medium text-accent-text">{t.when}</p>
+              </div>
+            </div>
+            <p className="measure mt-6 text-lg leading-relaxed text-muted-foreground">{t.body}</p>
+            <ul className="mt-6 space-y-3">
+              {t.points.map((p) => (
+                <li key={p} className="flex gap-3 leading-snug">
+                  <span
+                    aria-hidden="true"
+                    className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
+                  />
+                  <span>{p}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-10 lg:hidden">
+              <Phone shot={t.shot} alt={t.alt} className="max-w-[270px]" />
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div className="hidden lg:col-span-6 lg:block">
+        <div className="sticky top-28">
+          <Phone className="max-w-[310px]">
+            {TABS.map((t, i) => (
+              <div
+                key={t.id}
+                className="absolute inset-0 transition-opacity duration-500"
+                style={{ opacity: active === i ? 1 : 0 }}
+                aria-hidden={active !== i}
+              >
+                <Shot name={t.shot} alt={active === i ? t.alt : ""} />
+              </div>
+            ))}
+          </Phone>
+          <p className="mt-5 text-center text-sm text-muted-foreground" aria-hidden="true">
+            <span className="tnum text-subtle">
+              {active + 1} of {TABS.length}
+            </span>
+            <span className="mx-2 text-border-strong">/</span>
+            {TABS[active]!.name}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function HowItWorksPage() {
   return (
     <main>
-      {/* ---------------- Hero ---------------- */}
-      <section className="relative overflow-hidden pt-28 pb-14 md:pt-36 md:pb-20">
-        <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-          <div className="aurora absolute inset-0 opacity-70" />
-          <div className="orb left-[5%] top-[12%] h-56 w-56 bg-accent/35" />
-          <div
-            className="orb right-[7%] top-[28%] h-64 w-64 bg-accent-2/35"
-            style={{ animationDelay: "-5s" }}
-          />
-          <PaperGrid className="opacity-30" />
-        </div>
-
-        <div className="relative mx-auto max-w-4xl px-5 md:px-8">
-          <Reveal>
-            <Eyebrow>How it works</Eyebrow>
-          </Reveal>
-          <h1 className="mt-6 font-display text-4xl leading-[1.05] tracking-tight text-balance md:text-6xl">
-            <Reveal variant="mask" as="span" className="block">
-              Five screens.
-            </Reveal>
-            <Reveal variant="mask" as="span" delay={120} className="block">
-              One <span className="grad-text">two-minute habit.</span>
-            </Reveal>
-          </h1>
-          <Reveal delay={200}>
-            <p className="mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground">
-              CuspAI is a mobile app. Here is the loop it runs on, what every screen does, and when
-              you would actually open it.
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ---------------- The loop ---------------- */}
-      <section className="seam-top py-[64px] md:py-[100px]">
-        <div className="mx-auto max-w-5xl px-5 md:px-8">
-          <Reveal>
-            <Eyebrow>The loop</Eyebrow>
-            <h2 className="mt-5 max-w-xl font-display text-3xl tracking-tight text-balance md:text-4xl">
-              It closes. That is the whole idea.
-            </h2>
-          </Reveal>
-
-          <Reveal delay={100} variant="scale">
-            <div className="glass-card mt-10 overflow-x-auto rounded-2xl p-6 md:mt-14 md:p-10">
-              <div className="min-w-[620px]">
-                <LoopDiagram className="text-foreground" />
-              </div>
-            </div>
-          </Reveal>
-
-          <Reveal delay={150}>
-            <p className="mt-8 max-w-2xl leading-relaxed text-muted-foreground">
-              Every other product in this space is built to accumulate, into an archive that grows
-              whether you open it or not. CuspAI is built to finish. What you read closes out, what
-              you build gets marked done, and what closes in your gap map changes what arrives
-              tomorrow.
-            </p>
-          </Reveal>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="How it works"
+        lines={["The whole app,", "one screen at a time."]}
+        lead="CuspAI is a phone app with five tabs along the bottom. Here is how you start, what each tab does, and when you would open it."
+      >
+        <nav aria-label="On this page" className="flex flex-wrap gap-2">
+          {TABS.map((t) => (
+            <a
+              key={t.id}
+              href={`#${t.id}`}
+              className="chip transition-colors duration-150 hover:border-border-strong hover:text-foreground"
+            >
+              {t.name}
+            </a>
+          ))}
+        </nav>
+      </PageHero>
 
       {/* ---------------- Getting started ---------------- */}
-      <section className="border-t border-border py-[72px] md:py-[110px]">
+      <section className="hairline-t py-20 md:py-28">
         <div className="mx-auto max-w-6xl px-5 md:px-8">
           <Reveal>
-            <Eyebrow>Getting started</Eyebrow>
-            <h2 className="mt-5 max-w-xl font-display text-3xl tracking-tight text-balance md:text-5xl">
-              Three screens and you're running.
-            </h2>
+            <SectionHead
+              eyebrow="Getting started"
+              title="Three screens and you are in."
+              lead="There is no long sign-up. Picking what you follow is the whole setup."
+            />
           </Reveal>
 
-          <div className="mt-14 grid gap-10 md:mt-20 md:grid-cols-3 md:gap-8">
+          <ol className="mt-14 grid gap-12 md:grid-cols-3 md:gap-8">
             {START.map((step, i) => (
-              <Reveal key={step.n} delay={i * 100}>
-                <article className="flex h-full flex-col">
-                  <div className="flex items-baseline gap-4">
-                    <span className="font-mono text-[11px] tracking-[0.18em] text-accent">
-                      {step.n}
-                    </span>
-                    <span className="font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground">
-                      {step.note}
-                    </span>
-                  </div>
-                  <h3 className="mt-4 font-display text-2xl tracking-tight md:text-[1.65rem]">
-                    {step.title}
-                  </h3>
-                  <p className="mt-3 leading-relaxed text-muted-foreground">{step.body}</p>
-                  <div className="mt-8 flex justify-center">
-                    <ScreenshotSlot {...step.shot} />
-                  </div>
-                </article>
+              <Reveal as="li" key={step.n} delay={i * 80}>
+                <div className="flex items-baseline gap-3">
+                  <span className="tnum font-display text-sm text-accent-text">{step.n}</span>
+                  <span className="chip">{step.note}</span>
+                </div>
+                <h3 className="t-h3 mt-4">{step.title}</h3>
+                <p className="mt-3 leading-relaxed text-muted-foreground">{step.body}</p>
+                <Phone
+                  shot={step.shot}
+                  alt={step.alt}
+                  className="mt-8 max-w-[250px]"
+                  glow={false}
+                />
               </Reveal>
             ))}
-          </div>
+          </ol>
         </div>
       </section>
 
-      {/* ---------------- The five screens ---------------- */}
-      <section className="border-t border-border py-[72px] md:py-[110px]">
+      {/* ---------------- The tabs ---------------- */}
+      <section className="hairline-t bg-band py-20 md:py-28">
         <div className="mx-auto max-w-6xl px-5 md:px-8">
           <Reveal>
-            <Eyebrow>The five screens</Eyebrow>
-            <h2 className="mt-5 max-w-2xl font-display text-3xl tracking-tight text-balance md:text-5xl">
-              Everything in the app, and nothing behind a padlock.
-            </h2>
-            <p className="mt-6 max-w-xl leading-relaxed text-muted-foreground">
-              These are the five tabs along the bottom of the app. There is no sixth one teasing a
-              feature you can't reach.
-            </p>
+            <SectionHead
+              eyebrow="Inside the app"
+              title="Five tabs, and what a plan looks like."
+              lead="Build, Read, Discover, Skills and Saved sit along the bottom of every screen. A plan gets two stops of its own, because it is the part people ask about most."
+            />
           </Reveal>
-
-          <div className="mt-16 space-y-20 md:mt-24 md:space-y-28">
-            {SURFACES.map((s, i) => {
-              const flip = i % 2 === 1;
-              return (
-                <article key={s.key} className="grid items-center gap-10 md:grid-cols-12 md:gap-16">
-                  <div className={`md:col-span-6 ${flip ? "md:order-2" : ""}`}>
-                    <Reveal>
-                      <div className="flex items-center gap-3">
-                        <span className="flex h-9 w-9 items-center justify-center rounded-full border border-accent/25 bg-accent-tint text-accent">
-                          <SurfaceIcon name={s.key} className="h-[18px] w-[18px]" />
-                        </span>
-                        <h3 className="font-display text-3xl tracking-tight md:text-[2.25rem]">
-                          {s.name}
-                        </h3>
-                      </div>
-                      <p className="mt-4 font-mono text-[11px] tracking-[0.12em] uppercase text-muted-foreground md:text-xs">
-                        {s.when}
-                      </p>
-                      <p className="mt-5 leading-relaxed text-muted-foreground">{s.body}</p>
-                      <ul className="mt-6 space-y-2.5">
-                        {s.points.map((p) => (
-                          <li key={p} className="flex gap-3 leading-relaxed text-muted-foreground">
-                            <span
-                              aria-hidden="true"
-                              className="mt-[0.6em] h-px w-4 shrink-0 bg-accent/50"
-                            />
-                            <span>{p}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </Reveal>
-                  </div>
-
-                  <div className={`md:col-span-6 ${flip ? "md:order-1" : ""}`}>
-                    <Reveal variant="scale" delay={80}>
-                      <Parallax speed={flip ? 30 : 44}>
-                        <div className="relative flex justify-center">
-                          <div
-                            className="pointer-events-none absolute inset-0 rounded-2xl opacity-60"
-                            aria-hidden="true"
-                          >
-                            <div className="orb -right-6 -top-8 h-32 w-32 bg-accent-2/40" />
-                          </div>
-                          <div className="relative w-full">
-                            <ScreenshotSlot {...s.shot} />
-                          </div>
-                        </div>
-                      </Parallax>
-                    </Reveal>
-                  </div>
-                </article>
-              );
-            })}
+          <div className="mt-14 md:mt-20">
+            <Walkthrough />
           </div>
         </div>
       </section>
 
-      {/* ---------------- Free vs paid ---------------- */}
-      <section className="border-t border-border py-[72px] md:py-[110px]">
-        <div className="mx-auto max-w-4xl px-5 md:px-8">
-          <Reveal>
-            <Eyebrow>What it costs</Eyebrow>
-            <h2 className="mt-5 max-w-xl font-display text-3xl tracking-tight text-balance md:text-5xl">
-              The daily read is free forever.
-            </h2>
+      {/* ---------------- Cost ---------------- */}
+      <section className="hairline-t py-20 md:py-28">
+        <div className="mx-auto grid max-w-6xl gap-10 px-5 md:px-8 lg:grid-cols-12 lg:gap-16">
+          <Reveal className="lg:col-span-6">
+            <SectionHead
+              eyebrow="What it costs"
+              title="Reading is free. Build plans are where the cost is."
+            />
           </Reveal>
-
-          <div className="mt-12 grid gap-4 md:mt-14 md:grid-cols-2 md:gap-5">
-            <Reveal>
-              <article className="card-lift flex h-full flex-col rounded-lg border border-border bg-card p-6 md:p-8">
-                <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted-foreground md:text-xs">
-                  Free
-                </p>
-                <p className="mt-4 font-display text-3xl tracking-tight md:text-4xl">₹0</p>
-                <ul className="mt-6 space-y-2.5 leading-relaxed text-muted-foreground">
-                  {["Today: the finite daily read", "Discover", "Saved", "Your gap map"].map(
-                    (x) => (
-                      <li key={x} className="flex gap-3">
-                        <span
-                          aria-hidden="true"
-                          className="mt-[0.6em] h-px w-4 shrink-0 bg-accent/50"
-                        />
-                        <span>{x}</span>
-                      </li>
-                    ),
-                  )}
-                </ul>
-                <p className="mt-6 font-mono text-[11px] leading-relaxed tracking-[0.06em] text-muted-foreground md:text-xs">
-                  A commitment, not a promotion.
-                </p>
-              </article>
-            </Reveal>
-
-            <Reveal delay={90}>
-              <article className="card-lift flex h-full flex-col rounded-lg border border-accent/50 bg-card p-6 md:p-8">
-                <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted-foreground md:text-xs">
-                  CuspAI Pro
-                </p>
-                <p className="mt-4 font-display text-3xl tracking-tight md:text-4xl">
-                  ₹249<span className="text-lg text-muted-foreground">/mo</span>
-                </p>
-                <ul className="mt-6 space-y-2.5 leading-relaxed text-muted-foreground">
-                  {[
-                    "Build: stacks on demand, free and paid tracks",
-                    "The monthly Gap credential verdict",
-                    "Subscription audit: what to stop paying for",
-                  ].map((x) => (
-                    <li key={x} className="flex gap-3">
-                      <span
-                        aria-hidden="true"
-                        className="mt-[0.6em] h-px w-4 shrink-0 bg-accent/50"
-                      />
-                      <span>{x}</span>
-                    </li>
-                  ))}
-                </ul>
-                <p className="mt-6 font-mono text-[11px] leading-relaxed tracking-[0.06em] text-muted-foreground md:text-xs">
-                  Most people find more than ₹249 in the first audit.
-                </p>
-              </article>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* ---------------- CTA ---------------- */}
-      <section className="relative overflow-hidden border-t border-border py-20 md:py-28">
-        <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-          <div className="aurora absolute inset-0 opacity-80" />
-        </div>
-        <div className="relative mx-auto max-w-3xl px-5 text-center md:px-8">
-          <Reveal variant="blur">
-            <h2 className="font-display text-3xl tracking-tight text-balance md:text-5xl">
-              Two minutes tomorrow morning.
-            </h2>
-            <p className="mx-auto mt-5 max-w-lg leading-relaxed text-muted-foreground">
-              Tell us what you follow and the first read lands when CuspAI opens.
+          <Reveal delay={80} className="lg:col-span-6">
+            <p className="t-lead text-muted-foreground">
+              Read, Discover, Skills and Saved are free on every plan, for good. You also get three
+              build plans free, with no card. After that, Starter is $2 a month for eight plans and
+              Pro is $5 a month for twenty.
             </p>
-          </Reveal>
-          <Reveal delay={120}>
-            <div className="glass-card mx-auto mt-9 max-w-xl rounded-2xl p-5 text-left md:p-6">
-              <WaitlistForm id="email-how-it-works" source="how-it-works" />
-            </div>
-            <p className="mt-6 font-mono text-[11px] tracking-[0.08em] text-muted-foreground md:text-xs">
-              Or read{" "}
-              <Link to="/about" className="link-underline text-foreground">
-                what we're building and why
-              </Link>
-              .
-            </p>
+            <Link to="/pricing" className="btn btn-quiet group mt-8">
+              See the plans side by side
+              <ArrowRight size={18} aria-hidden="true" className="arrow" />
+            </Link>
           </Reveal>
         </div>
       </section>

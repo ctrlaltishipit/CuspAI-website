@@ -8,28 +8,27 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { useRouterState } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteNav } from "../components/site-nav";
 import { SiteFooter } from "../components/site-footer";
 import { ScrollProgress } from "../components/reveal";
+import { WaitlistBand } from "../components/sections/waitlist-band";
 
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="font-display text-7xl text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+        <p className="tnum font-display text-7xl tracking-tight text-accent">404</p>
+        <h1 className="t-h3 mt-4">This page isn't here.</h1>
+        <p className="mt-3 text-muted-foreground">
+          The link may be old, or the page may have moved. The home page has everything.
         </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition-opacity duration-150 hover:opacity-90"
-          >
-            Go home
+        <div className="mt-8">
+          <Link to="/" className="btn btn-primary">
+            Back to the home page
           </Link>
         </div>
       </div>
@@ -59,14 +58,11 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition-opacity duration-150 hover:opacity-90"
+            className="btn btn-primary btn-sm"
           >
             Try again
           </button>
-          <a
-            href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors duration-150 hover:bg-muted"
-          >
+          <a href="/" className="btn btn-quiet btn-sm">
             Go home
           </a>
         </div>
@@ -93,12 +89,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "CuspAI: the truth about what to use and what to learn" },
+      { title: "CuspAI: know what's moving, build what's next" },
       {
         name: "description",
         content:
-          "A dated, reasoned verdict on what changed, what to use, and what to learn next. Built for working professionals in India.",
+          "A two-minute daily brief on the fields you follow, and a step-by-step plan for whatever you want to build. Coming soon to iPhone and Android.",
       },
+      { name: "theme-color", content: "#051319" },
       { name: "author", content: "CuspAI" },
       { property: "og:site_name", content: "CuspAI" },
       { property: "og:type", content: "website" },
@@ -119,12 +116,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Figtree:wght@400..700&family=Outfit:wght@400..600&display=swap",
       },
     ],
     scripts: [
       {
-        children: `try{if(localStorage.getItem("cusp-theme")==="dark")document.documentElement.classList.add("dark");}catch(e){}`,
+        // The page is served dark. Only a visitor who chose light is switched,
+        // and it happens here, before the first paint, so nothing flashes.
+        children: `try{if(localStorage.getItem("cusp-theme")==="light")document.documentElement.classList.remove("dark");}catch(e){}`,
       },
       // Google Analytics 4. Route changes after the first load are counted by
       // GA4's own enhanced measurement, which listens for History API pushes;
@@ -150,7 +149,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en-IN">
+    // `dark` is the default look. The head script may remove the class before
+    // React hydrates, which is expected, so the mismatch warning is silenced.
+    <html lang="en-IN" className="dark" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
@@ -165,11 +166,23 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
+  // The admin dashboard is a tool, so it gets the page without the marketing chrome.
+  const admin = useRouterState({ select: (s) => s.location.pathname.startsWith("/admin") });
+
   return (
     <QueryClientProvider client={queryClient}>
-      <ScrollProgress />
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-full focus:bg-action focus:px-4 focus:py-2 focus:text-action-foreground"
+      >
+        Skip to the content
+      </a>
+      {admin ? null : <ScrollProgress />}
       <SiteNav />
-      <Outlet />
+      <div id="main">
+        <Outlet />
+      </div>
+      {admin ? null : <WaitlistBand />}
       <SiteFooter />
     </QueryClientProvider>
   );

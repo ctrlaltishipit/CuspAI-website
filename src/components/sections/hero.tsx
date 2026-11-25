@@ -1,73 +1,73 @@
-import { PhoneFrame } from "@/components/phone-frame";
+import { AppTour } from "@/components/app-tour";
+import { Backdrop } from "@/components/backdrop";
 import { WaitlistForm } from "@/components/waitlist-form";
-import { Reveal, Parallax } from "@/components/reveal";
-import { CadenceMark, PaperGrid } from "@/components/marks";
-import { Link } from "@tanstack/react-router";
+import { HERO_CHAPTERS } from "@/lib/tour-data";
 
+/**
+ * The first screen. Copy on the left, the app on the right, already moving:
+ * the phone plays a goal turning into a plan.
+ *
+ * The page arrives in one motion. The two heading lines rise from their own
+ * masks, the rest follows in a short stagger, and the phone settles last.
+ */
 export function Hero() {
   return (
-    <section
-      id="early-access"
-      className="relative flex min-h-svh items-center overflow-hidden pt-24 pb-16 md:pt-16 md:pb-0"
-    >
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div className="aurora absolute inset-0 opacity-70" />
-        <div className="orb left-[4%] top-[14%] h-64 w-64 bg-accent/35" />
-        <div
-          className="orb right-[6%] bottom-[10%] h-72 w-72 bg-accent-2/35"
-          style={{ animationDelay: "-8s" }}
-        />
-        <PaperGrid className="opacity-40" />
-      </div>
-      <div className="relative mx-auto grid w-full max-w-6xl items-center gap-14 px-5 md:grid-cols-[1.15fr_1fr] md:gap-12 md:px-8">
+    <section className="relative overflow-hidden pt-24 pb-16 md:pt-32 md:pb-24 lg:min-h-svh lg:pt-36">
+      <Backdrop />
+
+      <div className="relative mx-auto grid w-full max-w-6xl items-center gap-14 px-5 md:px-8 lg:grid-cols-[1.2fr_0.8fr] lg:gap-12">
         <div>
-          <h1 className="font-display text-balance text-[2.75rem] leading-[1.03] tracking-tight md:text-6xl lg:text-[4.25rem]">
-            <Reveal variant="mask" as="span" className="block">
-              The truth about what to use
-            </Reveal>
-            <Reveal variant="mask" as="span" delay={130} className="block">
-              and <span className="grad-text">what to learn.</span>
-            </Reveal>
+          <p className="fade-up chip" style={{ ["--d" as string]: "60ms" }}>
+            <span className="relative flex h-2 w-2" aria-hidden="true">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60 motion-reduce:hidden" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
+            </span>
+            Coming soon to iPhone and Android
+          </p>
+
+          <h1 className="t-hero mt-6">
+            <span className="line-mask">
+              <span style={{ ["--d" as string]: "120ms" }}>Know what's moving.</span>
+            </span>
+            <span className="line-mask">
+              <span className="text-accent" style={{ ["--d" as string]: "200ms" }}>
+                Build what's next.
+              </span>
+            </span>
           </h1>
 
-          <Reveal delay={220}>
-            <CadenceMark className="mt-7" />
-          </Reveal>
+          <p
+            className="fade-up t-lead measure mt-6 text-muted-foreground"
+            style={{ ["--d" as string]: "420ms" }}
+          >
+            CuspAI reads the newsletters and podcasts in your field and hands you the few things
+            worth knowing. When you want to build something, it turns your goal into a plan: the
+            tools, the costs and the steps.
+          </p>
 
-          <Reveal delay={200}>
-            <p className="mt-6 max-w-md text-lg leading-relaxed text-muted-foreground">
-              One pick. One runner-up. One thing to stop paying for. Dated,
-              reasoned, priced in rupees.
+          <dl
+            className="fade-up mt-8 flex items-baseline gap-4 border-y border-border py-4"
+            style={{ ["--d" as string]: "480ms" }}
+          >
+            <dt className="whitespace-nowrap font-display text-3xl tracking-tight text-foreground md:text-4xl">
+              2 minutes
+            </dt>
+            <dd className="text-muted-foreground">
+              to read it all. Any time of day. Then it ends.
+            </dd>
+          </dl>
+
+          <div className="fade-up mt-8 max-w-xl" style={{ ["--d" as string]: "540ms" }}>
+            <WaitlistForm id="email-hero" source="hero" />
+            <p className="mt-4 text-sm text-subtle">
+              One email, on the day it opens. Free to try, and you don't need a tech background.
             </p>
-          </Reveal>
-
-          <Reveal delay={260}>
-            <div className="mt-10 max-w-xl">
-              <WaitlistForm id="email-hero" source="hero" />
-              <p className="mt-4 font-mono text-[11px] tracking-[0.08em] text-muted-foreground md:text-xs">
-                One email when CuspAI opens. Nothing else.
-              </p>
-              <Link
-                to="/use-cases"
-                className="link-underline mt-6 inline-flex items-center gap-2 text-sm font-medium text-foreground"
-              >
-                See a real week on CuspAI
-                <span aria-hidden="true" className="text-accent">&rarr;</span>
-              </Link>
-            </div>
-          </Reveal>
+          </div>
         </div>
 
-        <Reveal delay={320} variant="scale">
-          <Parallax speed={46}>
-            <PhoneFrame
-              src="/screens/stack-phone-light.webp"
-              srcDark="/screens/stack-phone-dark.webp"
-              alt="The CuspAI app showing a stack it built: a free track and a paid track, each tool listed with what it costs and the one line explaining why it was chosen."
-              caption="An actual verdict. 26 Aug 2026."
-            />
-          </Parallax>
-        </Reveal>
+        <div className="settle" style={{ ["--d" as string]: "380ms" }}>
+          <AppTour chapters={HERO_CHAPTERS} variant="hero" />
+        </div>
       </div>
     </section>
   );

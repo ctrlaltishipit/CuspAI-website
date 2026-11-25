@@ -1,27 +1,29 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Hero } from "@/components/sections/hero";
-import { Problem } from "@/components/sections/problem";
-import { HowItWorks } from "@/components/sections/how-it-works";
-import { Sceptics } from "@/components/sections/sceptics";
-import { Surfaces } from "@/components/sections/surfaces";
-import { FounderNote } from "@/components/sections/founder-note";
+import {
+  Audience,
+  Features,
+  PricingTeaser,
+  Promises,
+  Tour,
+  Why,
+} from "@/components/sections/home-sections";
 import { Faq } from "@/components/sections/faq";
-import { FinalCta } from "@/components/sections/final-cta";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "CuspAI: a dated, reasoned verdict on what to use and what to learn" },
+      { title: "CuspAI: know what's moving, build what's next" },
       {
         name: "description",
         content:
-          "CuspAI gives working professionals in India one pick, one runner-up, and one thing to stop paying for, with prices in rupees and the dates they were checked.",
+          "CuspAI gives you a two-minute daily brief on the fields you follow, and turns what you want to build into a plan with the tools, the costs and the steps. Coming soon to iPhone and Android.",
       },
-      { property: "og:title", content: "CuspAI: the truth about what to use and what to learn" },
+      { property: "og:title", content: "CuspAI: know what's moving, build what's next" },
       {
         property: "og:description",
         content:
-          "A dated, reasoned verdict on the three decisions that cost you the most money and time. One pick. One runner-up. One thing to stop paying for.",
+          "A two-minute daily brief on the fields you follow. A step-by-step plan for whatever you want to build. Free to read, and three build plans to try.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -30,17 +32,23 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+/**
+ * The home page, in the order a visitor asks the questions: what is it, why
+ * does it exist, what does it look like, what is in it, is it for me, can I
+ * trust it, what does it cost, and what else should I know. The signup band
+ * that closes every page comes from the root layout.
+ */
 function Index() {
   return (
     <main>
       <Hero />
-      <Problem />
-      <HowItWorks />
-      <Sceptics />
-      <Surfaces />
-      <FounderNote />
+      <Why />
+      <Tour />
+      <Features />
+      <Audience />
+      <Promises />
+      <PricingTeaser />
       <Faq />
-      <FinalCta />
     </main>
   );
 }

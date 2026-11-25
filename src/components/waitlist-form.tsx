@@ -1,3 +1,4 @@
+import { ArrowRight, Check } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { joinWaitlist } from "@/lib/waitlist";
 import { trackEvent } from "@/lib/analytics";
@@ -6,14 +7,14 @@ type Status = "idle" | "empty" | "invalid" | "error" | "success";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const fieldClass =
-  "w-full rounded-full border border-input bg-background px-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring";
+const labelClass = "mb-1.5 block text-sm font-medium text-foreground";
 
 /**
- * The single CTA on this site. All feedback is inline, beneath the fields.
+ * The one call to action on this site. Labels sit above their fields, and all
+ * feedback is inline, under the form.
  *
- * Submits to the `joinWaitlist` server function, which writes to Supabase —
- * the key never reaches the browser. `source` records which form was used so
+ * Submits to the `joinWaitlist` server function, which writes to Supabase, so
+ * the key never reaches the browser. `source` records which form was used, so
  * we can tell which page actually converts.
  */
 export function WaitlistForm({ id, source }: { id: string; source?: string }) {
@@ -44,8 +45,8 @@ export function WaitlistForm({ id, source }: { id: string; source?: string }) {
       if (result.ok) {
         setAlreadyJoined(result.alreadyJoined);
         setStatus("success");
-        // Only a genuinely new signup counts. Firing on a repeat submission
-        // would inflate the conversion number in Analytics.
+        // Only a new signup counts. Firing on a repeat submission would
+        // inflate the conversion number in Analytics.
         if (!result.alreadyJoined) {
           trackEvent("sign_up", { method: "waitlist", source: source ?? "unknown" });
         }
@@ -53,7 +54,7 @@ export function WaitlistForm({ id, source }: { id: string; source?: string }) {
         setStatus(result.reason === "invalid" ? "invalid" : "error");
       }
     } catch {
-      setStatus("error"); // typed values are preserved — never cleared
+      setStatus("error"); // typed values are kept, never cleared
     } finally {
       setPending(false);
     }
@@ -61,102 +62,109 @@ export function WaitlistForm({ id, source }: { id: string; source?: string }) {
 
   if (status === "success") {
     return (
-      <div>
-        <p className="font-display text-2xl md:text-3xl">
-          {alreadyJoined ? "You're already on the list." : "You're on the list."}
-        </p>
-        <p className="mt-3 font-mono text-[11px] tracking-[0.08em] text-muted-foreground md:text-xs">
-          {alreadyJoined
-            ? `${email.trim()} was already down. One email, when CuspAI opens.`
-            : `We'll email ${email.trim()} once, when CuspAI opens.`}
-        </p>
+      <div className="fade-up flex items-start gap-4" role="status">
+        <span className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-action text-action-foreground">
+          <Check size={20} strokeWidth={2.5} aria-hidden="true" />
+        </span>
+        <div>
+          <p className="font-display text-2xl tracking-tight md:text-[1.75rem]">
+            {alreadyJoined ? "You're already on the list." : "You're on the list."}
+          </p>
+          <p className="mt-2 text-muted-foreground">
+            {alreadyJoined
+              ? `${email.trim()} was already signed up. We'll email you once, when CuspAI opens.`
+              : `We'll email ${email.trim()} once, when CuspAI opens.`}
+          </p>
+        </div>
       </div>
     );
   }
 
   const message =
     status === "empty"
-      ? "Enter your name and email address."
+      ? "Add your name and email address to join."
       : status === "invalid"
-        ? "That doesn't look like an email address."
+        ? "That doesn't look like an email address. Check it and try again."
         : status === "error"
-          ? "Something went wrong on our end. Your details are still here, so try again."
+          ? "That didn't go through, and the problem is on our side. Your details are still here, so try again."
           : null;
+
+  const clearOnType = () => {
+    if (status !== "idle") setStatus("idle");
+  };
 
   return (
     <form onSubmit={handleSubmit} noValidate>
-      <div className="flex flex-col gap-3">
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <div className="flex-1">
-            <label htmlFor={`${id}-name`} className="sr-only">
-              Your name
-            </label>
-            <input
-              id={`${id}-name`}
-              type="text"
-              autoComplete="name"
-              placeholder="Your name"
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-                if (status !== "idle") setStatus("idle");
-              }}
-              aria-invalid={status === "empty" && !name.trim()}
-              className={fieldClass}
-            />
-          </div>
-          <div className="flex-1">
-            <label htmlFor={id} className="sr-only">
-              Email address
-            </label>
-            <input
-              id={id}
-              type="email"
-              autoComplete="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                if (status !== "idle") setStatus("idle");
-              }}
-              onBlur={handleBlur}
-              aria-invalid={status === "invalid" || (status === "empty" && !email.trim())}
-              aria-describedby={message ? `${id}-msg` : undefined}
-              className={fieldClass}
-            />
-          </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label htmlFor={`${id}-name`} className={labelClass}>
+            Your name
+          </label>
+          <input
+            id={`${id}-name`}
+            type="text"
+            autoComplete="name"
+            placeholder="First and last name"
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+              clearOnType();
+            }}
+            aria-invalid={status === "empty" && !name.trim()}
+            aria-describedby={message ? `${id}-msg` : undefined}
+            className="field"
+          />
         </div>
-
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <div className="flex-1">
-            <label htmlFor={`${id}-role`} className="sr-only">
-              What you do (optional)
-            </label>
-            <input
-              id={`${id}-role`}
-              type="text"
-              autoComplete="organization-title"
-              placeholder="What you do (optional)"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className={fieldClass}
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={pending}
-            className="btn-accent shrink-0 rounded-full px-6 py-3 text-base font-medium disabled:opacity-60"
-          >
-            {pending ? "Joining…" : "Get early access"}
+        <div>
+          <label htmlFor={id} className={labelClass}>
+            Email address
+          </label>
+          <input
+            id={id}
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              clearOnType();
+            }}
+            onBlur={handleBlur}
+            aria-invalid={status === "invalid" || (status === "empty" && !email.trim())}
+            aria-describedby={message ? `${id}-msg` : undefined}
+            className="field"
+          />
+        </div>
+        <div>
+          <label htmlFor={`${id}-role`} className={labelClass}>
+            What you do <span className="font-normal text-subtle">(optional)</span>
+          </label>
+          <input
+            id={`${id}-role`}
+            type="text"
+            autoComplete="organization-title"
+            placeholder="Sales lead, teacher, founder"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            className="field"
+          />
+        </div>
+        <div className="flex items-end">
+          <button type="submit" disabled={pending} className="btn btn-primary group w-full">
+            {pending ? "Joining" : "Join the waitlist"}
+            <ArrowRight size={18} aria-hidden="true" className="arrow" />
           </button>
         </div>
       </div>
 
-      {message && (
-        <p id={`${id}-msg`} className="mt-3 text-sm text-muted-foreground" role="status">
-          {message}
-        </p>
-      )}
+      <p
+        id={`${id}-msg`}
+        role="status"
+        className={message ? "mt-3 text-sm text-foreground" : "sr-only"}
+      >
+        {message ?? ""}
+      </p>
     </form>
   );
 }
