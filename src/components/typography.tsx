@@ -1,13 +1,31 @@
 import type { ReactNode } from "react";
 
 /**
- * The small label above a heading. Sentence case, with the logo's odd point
- * in front of it: one dot in the theme's lead colour.
+ * The house divider between a headline and its paragraph: a short comb of
+ * bars stepping down in height. The bars rise in turn when it appears.
  */
+export function CadenceMark({ className = "" }: { className?: string }) {
+  return (
+    <span className={`cadence gap-[7px] ${className}`} aria-hidden="true">
+      <i style={{ height: 18, opacity: 1 }} />
+      <i style={{ height: 12, opacity: 0.75 }} />
+      <i style={{ height: 8, opacity: 0.55 }} />
+      <i style={{ height: 5, opacity: 0.4 }} />
+      <i style={{ height: 5, opacity: 0.25 }} />
+      <i style={{ height: 5, opacity: 0.14 }} />
+    </span>
+  );
+}
+
+/** The small label above a heading, led by three stepped ticks. */
 export function Eyebrow({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
-    <p className={`flex items-center gap-2.5 text-sm font-semibold text-accent-text ${className}`}>
-      <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent" />
+    <p className={`flex items-center gap-3 text-sm font-semibold text-accent-text ${className}`}>
+      <span className="cadence translate-y-[1px] gap-[4px]" aria-hidden="true">
+        <i style={{ height: 10, opacity: 1 }} />
+        <i style={{ height: 6, opacity: 0.55 }} />
+        <i style={{ height: 3, opacity: 0.3 }} />
+      </span>
       <span>{children}</span>
     </p>
   );
@@ -38,7 +56,7 @@ export function SectionHead({
   );
 }
 
-/** One word or phrase in a heading, in the theme's lead colour. Once per page. */
+/** One phrase in a heading, in the blue gradient. Once per page. */
 export function Accent({ children }: { children: ReactNode }) {
-  return <span className="text-accent">{children}</span>;
+  return <span className="grad-text">{children}</span>;
 }

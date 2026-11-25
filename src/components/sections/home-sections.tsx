@@ -107,7 +107,7 @@ export function Why() {
 export function Tour() {
   return (
     <section id="demo" className="hairline-t relative overflow-hidden bg-band py-20 md:py-28">
-      <div className="glow-centre pointer-events-none absolute inset-0" aria-hidden="true" />
+      <div className="accent-wash pointer-events-none absolute inset-0" aria-hidden="true" />
       <div className={`relative ${wrap}`}>
         <Reveal>
           <SectionHead

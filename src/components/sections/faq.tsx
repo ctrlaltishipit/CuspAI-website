@@ -66,25 +66,22 @@ export function Faq({
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section className="hairline-t py-20 md:py-28">
-      <div className="mx-auto grid max-w-6xl gap-10 px-5 md:px-8 lg:grid-cols-12 lg:gap-16">
-        <Reveal className="lg:col-span-4">
+    <section className="hairline-t py-20 md:py-32">
+      <div className="mx-auto max-w-3xl px-5 md:px-8">
+        <Reveal>
           <SectionHead eyebrow={eyebrow} title={title} />
-          <p className="mt-5 text-muted-foreground">
-            Something else on your mind? Write to{" "}
-            <a href="mailto:hello@cuspai.io" className="link">
-              hello@cuspai.io
-            </a>
-            .
-          </p>
         </Reveal>
 
-        <div className="lg:col-span-8">
+        <div className="mt-12 space-y-2">
           {items.map((item, i) => {
             const isOpen = open === i;
             return (
-              <Reveal key={item.q} delay={Math.min(i, 6) * 40}>
-                <div className="border-b border-border">
+              <Reveal key={item.q} delay={Math.min(i, 6) * 50}>
+                <div
+                  className={`rounded-xl border bg-surface transition-colors duration-300 ${
+                    isOpen ? "border-accent/50" : "border-border"
+                  }`}
+                >
                   <h3 className="font-sans text-base font-normal tracking-normal">
                     <button
                       type="button"
@@ -92,31 +89,19 @@ export function Faq({
                       aria-expanded={isOpen}
                       aria-controls={`${idPrefix}-panel-${i}`}
                       id={`${idPrefix}-button-${i}`}
-                      className="group flex min-h-[4rem] w-full items-center justify-between gap-6 py-4 text-left"
+                      className="flex min-h-[4rem] w-full items-center justify-between gap-6 px-5 py-4 text-left"
                     >
-                      <span
-                        className={`font-display text-lg tracking-tight transition-colors duration-150 md:text-xl ${
-                          isOpen
-                            ? "text-foreground"
-                            : "text-foreground/90 group-hover:text-foreground"
-                        }`}
-                      >
+                      <span className="font-display text-lg tracking-tight text-foreground md:text-xl">
                         {item.q}
                       </span>
-                      <span
+                      {/* The plus turns into a cross. */}
+                      <Plus
+                        size={20}
                         aria-hidden="true"
-                        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-[background-color,border-color,color] duration-300 ${
-                          isOpen
-                            ? "border-transparent bg-action text-action-foreground"
-                            : "border-border text-muted-foreground group-hover:border-border-strong"
+                        className={`shrink-0 transition-transform duration-300 ${
+                          isOpen ? "rotate-45 text-accent-text" : "text-muted-foreground"
                         }`}
-                      >
-                        {/* The plus turns into a cross. Only the glyph turns, so the circle never grows past its box. */}
-                        <Plus
-                          size={18}
-                          className={`transition-transform duration-300 ${isOpen ? "rotate-45" : ""}`}
-                        />
-                      </span>
+                      />
                     </button>
                   </h3>
                   <div
@@ -128,7 +113,9 @@ export function Faq({
                     }`}
                   >
                     <div className="overflow-hidden" inert={!isOpen}>
-                      <p className="measure pb-6 leading-relaxed text-muted-foreground">{item.a}</p>
+                      <p className="measure px-5 pb-5 leading-relaxed text-muted-foreground">
+                        {item.a}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -136,6 +123,16 @@ export function Faq({
             );
           })}
         </div>
+
+        <Reveal>
+          <p className="mt-8 text-muted-foreground">
+            Something else on your mind? Write to{" "}
+            <a href="mailto:hello@cuspai.io" className="link">
+              hello@cuspai.io
+            </a>
+            .
+          </p>
+        </Reveal>
       </div>
     </section>
   );

@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
 import { Phone, type ShotName } from "@/components/phone";
-import { Reveal } from "@/components/reveal";
+import { Parallax, Reveal, ScrollFocus } from "@/components/reveal";
 import { Accent } from "@/components/typography";
 
 export const Route = createFileRoute("/use-cases")({
@@ -196,7 +196,11 @@ function UseCasesPage() {
               <div className={`lg:col-span-5 ${flip ? "lg:order-1" : ""}`}>
                 <Reveal variant="scale" delay={80}>
                   <figure>
-                    <Phone shot={ex.shot} alt={ex.alt} className="max-w-[290px]" />
+                    <Parallax speed={flip ? 34 : 52}>
+                      <ScrollFocus>
+                        <Phone shot={ex.shot} alt={ex.alt} className="max-w-[290px]" />
+                      </ScrollFocus>
+                    </Parallax>
                     <figcaption className="mx-auto mt-6 max-w-[290px] text-center text-sm leading-snug text-subtle">
                       {ex.caption}
                     </figcaption>

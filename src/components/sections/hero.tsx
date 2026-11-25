@@ -1,5 +1,8 @@
+import { Link } from "@tanstack/react-router";
 import { AppTour } from "@/components/app-tour";
 import { Backdrop } from "@/components/backdrop";
+import { Parallax } from "@/components/reveal";
+import { CadenceMark } from "@/components/typography";
 import { WaitlistForm } from "@/components/waitlist-form";
 import { HERO_CHAPTERS } from "@/lib/tour-data";
 
@@ -30,11 +33,15 @@ export function Hero() {
               <span style={{ ["--d" as string]: "120ms" }}>Know what's moving.</span>
             </span>
             <span className="line-mask">
-              <span className="text-accent" style={{ ["--d" as string]: "200ms" }}>
+              <span className="grad-text" style={{ ["--d" as string]: "200ms" }}>
                 Build what's next.
               </span>
             </span>
           </h1>
+
+          <div className="fade-up mt-7" style={{ ["--d" as string]: "360ms" }}>
+            <CadenceMark />
+          </div>
 
           <p
             className="fade-up t-lead measure mt-6 text-muted-foreground"
@@ -62,11 +69,22 @@ export function Hero() {
             <p className="mt-4 text-sm text-subtle">
               One email, on the day it opens. Free to try, and you don't need a tech background.
             </p>
+            <Link
+              to="/use-cases"
+              className="group mt-6 inline-flex items-center gap-2 text-sm font-semibold text-foreground"
+            >
+              See four worked examples
+              <span aria-hidden="true" className="arrow text-accent-text">
+                &rarr;
+              </span>
+            </Link>
           </div>
         </div>
 
         <div className="settle" style={{ ["--d" as string]: "380ms" }}>
-          <AppTour chapters={HERO_CHAPTERS} variant="hero" />
+          <Parallax speed={46}>
+            <AppTour chapters={HERO_CHAPTERS} variant="hero" />
+          </Parallax>
         </div>
       </div>
     </section>

@@ -23,10 +23,10 @@ const COLUMNS = [
 const linkClass =
   "inline-flex min-h-[2.75rem] items-center text-[0.9375rem] text-muted-foreground transition-colors duration-150 hover:text-foreground md:min-h-0";
 
-/** The closing band. Always dark, in either theme, so every page ends the same way. */
+/** The footer, on the page's own ground with a hairline above it. */
 export function SiteFooter() {
   return (
-    <footer className="dark border-t border-border bg-deep text-foreground">
+    <footer className="border-t border-border">
       <div className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-20">
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-5">

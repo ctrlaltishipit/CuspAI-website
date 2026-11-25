@@ -11,7 +11,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { PageHero } from "@/components/page-hero";
 import { Phone, Shot, type ShotName } from "@/components/phone";
-import { Reveal } from "@/components/reveal";
+import { Reveal, ScrollFocus } from "@/components/reveal";
 import { SectionHead } from "@/components/typography";
 
 export const Route = createFileRoute("/how-it-works")({
@@ -312,12 +312,14 @@ function HowItWorksPage() {
                 </div>
                 <h3 className="t-h3 mt-4">{step.title}</h3>
                 <p className="mt-3 leading-relaxed text-muted-foreground">{step.body}</p>
-                <Phone
-                  shot={step.shot}
-                  alt={step.alt}
-                  className="mt-8 max-w-[250px]"
-                  glow={false}
-                />
+                <ScrollFocus>
+                  <Phone
+                    shot={step.shot}
+                    alt={step.alt}
+                    className="mt-8 max-w-[250px]"
+                    glow={false}
+                  />
+                </ScrollFocus>
               </Reveal>
             ))}
           </ol>

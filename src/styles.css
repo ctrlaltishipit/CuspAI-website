@@ -106,6 +106,11 @@
   --blue: oklch(0.525 0.102 218);
   --blue-text: oklch(0.44 0.095 222);
 
+  /* The three steps of blue behind every gradient, wash and glow. */
+  --tone-1: oklch(0.365 0.085 226);
+  --tone-2: oklch(0.525 0.102 218);
+  --tone-3: oklch(0.255 0.055 228);
+
   /* The logo keeps its original three steps of blue-teal. */
   --logo-a: #0d4a53;
   --logo-b: #0d4a53;
@@ -143,6 +148,10 @@
   --blue: oklch(0.7 0.098 214);
   --blue-text: oklch(0.74 0.1 212);
 
+  --tone-1: oklch(0.665 0.105 214);
+  --tone-2: oklch(0.815 0.075 205);
+  --tone-3: oklch(0.435 0.088 222);
+
   --logo-a: #4fb3c4;
   --logo-b: #7fd2de;
   --logo-c: #2b8496;
@@ -155,6 +164,38 @@
   --dot: oklch(0.735 0.026 216 / 0.13);
   --bezel: oklch(0.11 0.018 228);
   --shadow: 0 0 0;
+}
+
+/* Deep blue band: white text on blue, used to break the page's rhythm. Sits
+   on an element that also carries `dark`, so everything inside it reads as
+   the dark theme with a bluer, lighter ground. */
+.band-deep {
+  --background: oklch(0.265 0.06 227);
+  --deep: oklch(0.225 0.055 227);
+  --band: oklch(0.292 0.058 227);
+  --foreground: oklch(0.985 0.006 210);
+  --surface: oklch(0.298 0.058 227);
+  --surface-2: oklch(0.335 0.062 226);
+  --muted-foreground: oklch(0.805 0.03 212);
+  --subtle: oklch(0.72 0.03 214);
+  --border: oklch(0.375 0.055 224);
+  --border-strong: oklch(0.46 0.055 222);
+  --action: oklch(0.745 0.095 210);
+  --action-hover: oklch(0.8 0.085 207);
+  --action-foreground: oklch(0.2 0.045 228);
+  --accent: oklch(0.845 0.07 202);
+  --accent-text: oklch(0.845 0.07 202);
+  --accent-soft: oklch(0.335 0.062 226);
+  --tone-1: oklch(0.745 0.095 210);
+  --tone-2: oklch(0.845 0.07 202);
+  --tone-3: oklch(0.545 0.09 218);
+  background-color: var(--background);
+  color: var(--foreground);
+}
+.dark .band-deep {
+  --background: oklch(0.215 0.045 227);
+  --surface: oklch(0.252 0.048 227);
+  --border: oklch(0.325 0.048 224);
 }
 
 @layer base {
@@ -301,14 +342,43 @@
     font-size: 0.9375rem;
   }
 
-  /* The one filled button: the theme's blue, with the text colour that reads on it. */
+  /* The one filled button: a three-step blue gradient, a soft glow under it,
+     and a sweep of light across it on hover. */
   .btn-primary {
-    background-color: var(--action);
+    position: relative;
+    overflow: hidden;
+    background-image: linear-gradient(
+      110deg,
+      var(--tone-3) 0%,
+      var(--tone-1) 52%,
+      color-mix(in oklab, var(--tone-2) 78%, var(--tone-1)) 100%
+    );
     color: var(--action-foreground);
+    box-shadow: 0 12px 28px -16px color-mix(in oklab, var(--tone-3) 85%, transparent);
+    transition:
+      transform 260ms var(--ease-enter),
+      box-shadow 260ms ease;
+  }
+  .btn-primary::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-110%) skewX(-18deg);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in oklab, white 45%, transparent),
+      transparent
+    );
+    transition: transform 700ms var(--ease-enter);
+    pointer-events: none;
   }
   .btn-primary:hover {
-    background-color: var(--action-hover);
     transform: translateY(-1px);
+    box-shadow: 0 16px 34px -16px color-mix(in oklab, var(--tone-1) 95%, transparent);
+  }
+  .btn-primary:hover::after {
+    transform: translateX(110%) skewX(-18deg);
   }
   .btn-primary:active {
     transform: translateY(1px) scale(0.985);
@@ -349,10 +419,18 @@
       border-color 200ms var(--ease-ui),
       background-color 200ms var(--ease-ui);
   }
+  .card-hover {
+    transition:
+      transform 300ms var(--ease-enter),
+      border-color 300ms ease,
+      box-shadow 300ms ease;
+  }
   .card-hover:hover {
-    transform: translateY(-2px);
-    border-color: var(--border-strong);
-    background-color: color-mix(in oklab, var(--surface) 70%, var(--surface-2));
+    transform: translateY(-3px);
+    border-color: color-mix(in oklab, var(--foreground) 18%, transparent);
+    box-shadow:
+      inset 0 1px 0 var(--edge),
+      0 12px 32px -18px color-mix(in oklab, var(--foreground) 40%, transparent);
   }
 
   /* A soft light that follows the pointer across a card. Set by <Spotlight>. */
@@ -477,11 +555,163 @@
     background: radial-gradient(46rem 24rem at 50% 0%, var(--glow-a), transparent 70%);
   }
 
+  /* Three soft washes of blue behind a first screen. */
+  .aurora {
+    background:
+      radial-gradient(
+        46% 60% at 14% 8%,
+        color-mix(in oklab, var(--tone-1) 22%, transparent),
+        transparent 68%
+      ),
+      radial-gradient(
+        40% 55% at 86% 12%,
+        color-mix(in oklab, var(--tone-2) 24%, transparent),
+        transparent 70%
+      ),
+      radial-gradient(
+        50% 60% at 60% 96%,
+        color-mix(in oklab, var(--tone-3) 18%, transparent),
+        transparent 72%
+      );
+    filter: blur(2px);
+  }
+  .accent-wash {
+    background:
+      radial-gradient(
+        60% 90% at 12% 0%,
+        color-mix(in oklab, var(--tone-1) 12%, transparent),
+        transparent 70%
+      ),
+      radial-gradient(
+        55% 80% at 92% 100%,
+        color-mix(in oklab, var(--tone-2) 14%, transparent),
+        transparent 72%
+      );
+  }
+
+  /* A blurred ball of colour that drifts very slowly. */
+  .orb {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(60px);
+    opacity: 0.5;
+    animation: orb-drift 18s ease-in-out infinite alternate;
+  }
+  @keyframes orb-drift {
+    from {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    to {
+      transform: translate3d(24px, -28px, 0) scale(1.12);
+    }
+  }
+
+  /* Faint ruled paper, fading out toward the bottom. */
+  .paper-grid {
+    background-image:
+      linear-gradient(to right, var(--border) 0.6px, transparent 0.6px),
+      linear-gradient(to bottom, var(--border) 0.6px, transparent 0.6px);
+    background-size: 72px 72px;
+    mask-image: linear-gradient(to bottom, rgb(0 0 0 / 0.9), transparent);
+  }
+
+  /* Emphasis in a heading: the blue gradient, clipped to the letters. */
+  .grad-text {
+    background-image: linear-gradient(
+      100deg,
+      var(--tone-1) 0%,
+      color-mix(in oklab, var(--tone-3) 45%, var(--tone-1)) 45%,
+      var(--tone-2) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .progress-bar {
+    background-image: linear-gradient(90deg, var(--tone-1), var(--tone-2) 55%, var(--tone-3));
+  }
+
+  /* Frosted panel behind a signup form. */
+  .glass-card {
+    background: color-mix(in oklab, var(--surface) 66%, transparent);
+    backdrop-filter: blur(18px) saturate(135%);
+    border: 1px solid color-mix(in oklab, var(--tone-1) 22%, var(--border));
+    box-shadow:
+      0 1px 0 color-mix(in oklab, white 12%, transparent) inset,
+      0 26px 64px -36px color-mix(in oklab, var(--tone-3) 62%, transparent);
+  }
+
+  /* The house mark: a short comb of bars stepping down in height. */
+  .cadence {
+    display: inline-flex;
+    align-items: flex-end;
+  }
+  .cadence i {
+    display: block;
+    width: 2px;
+    border-radius: 1px;
+    background-color: var(--tone-1);
+    transform-origin: bottom;
+    animation: cadence-rise 620ms var(--ease-enter) both;
+  }
+  .cadence i:nth-child(2) {
+    animation-delay: 70ms;
+  }
+  .cadence i:nth-child(3) {
+    animation-delay: 140ms;
+  }
+  .cadence i:nth-child(4) {
+    animation-delay: 210ms;
+  }
+  .cadence i:nth-child(5) {
+    animation-delay: 280ms;
+  }
+  .cadence i:nth-child(6) {
+    animation-delay: 350ms;
+  }
+  @keyframes cadence-rise {
+    from {
+      transform: scaleY(0);
+    }
+  }
+
+  /* Screenshot emphasis driven by <ScrollFocus>. */
+  .scroll-focus {
+    transform-origin: center;
+    will-change: opacity, transform;
+    transition:
+      opacity 120ms linear,
+      transform 120ms linear;
+  }
+
+  html:not(.dark) .aurora {
+    opacity: 0.38;
+  }
+  html:not(.dark) .orb {
+    opacity: 0.22;
+  }
+  .band-deep .orb {
+    opacity: 0.45;
+  }
+
   .hairline-b {
     border-bottom: 1px solid var(--border);
   }
   .hairline-t {
+    position: relative;
     border-top: 1px solid var(--border);
+  }
+  .hairline-t::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 50%;
+    width: 84px;
+    height: 1px;
+    transform: translateX(-50%);
+    background-image: radial-gradient(circle, var(--tone-1) 1px, transparent 1px);
+    background-size: 8px 1px;
   }
 }
 
@@ -710,8 +940,14 @@
     }
     .marquee,
     .pulse-dot,
-    .breathe {
+    .breathe,
+    .orb,
+    .cadence i {
       animation: none;
+    }
+    .scroll-focus,
+    .btn-primary::after {
+      transition: none;
     }
     .pulse-dot {
       opacity: 0;

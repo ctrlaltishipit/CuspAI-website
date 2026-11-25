@@ -102,7 +102,115 @@ export function ScrollProgress() {
 
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-x-0 top-0 z-[60] h-[2px]">
-      <div ref={ref} className="h-full w-full origin-left scale-x-0 bg-accent" />
+      <div ref={ref} className="progress-bar h-full w-full origin-left scale-x-0" />
+    </div>
+  );
+}
+
+/**
+ * Light parallax: the child drifts a little as it crosses the window. Off on
+ * small screens and under reduced motion.
+ */
+export function Parallax({
+  children,
+  speed = 40,
+  className = "",
+}: {
+  children: ReactNode;
+  speed?: number;
+  className?: string;
+}) {
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (prefersReducedMotion()) return;
+    if (window.matchMedia("(max-width: 1023px)").matches) return;
+
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight || 1;
+      // -1 below the fold, 1 above it.
+      const p = (rect.top + rect.height / 2 - vh / 2) / vh;
+      el.style.transform = `translate3d(0, ${(-p * speed).toFixed(2)}px, 0)`;
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [speed]);
+
+  return (
+    <div ref={ref} className={`will-change-transform ${className}`}>
+      {children}
+    </div>
+  );
+}
+
+/**
+ * Keeps a screenshot in focus while it is the thing being read: it fades up
+ * and grows toward full size near the middle of the window, and eases back as
+ * it leaves. Under reduced motion the child simply sits at rest.
+ */
+export function ScrollFocus({
+  children,
+  className = "",
+  minOpacity = 0.5,
+  minScale = 0.92,
+  falloff = 0.72,
+}: {
+  children: ReactNode;
+  className?: string;
+  minOpacity?: number;
+  minScale?: number;
+  /** How far from centre, in window heights, the effect reaches zero. */
+  falloff?: number;
+}) {
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (prefersReducedMotion()) return;
+
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight || 1;
+      const offset = Math.abs(rect.top + rect.height / 2 - vh / 2) / vh;
+      const t = Math.min(1, Math.max(0, 1 - offset / falloff));
+      // Eased, so it spends longer at full focus than at the edges.
+      const eased = t * t * (3 - 2 * t);
+      el.style.opacity = String(minOpacity + (1 - minOpacity) * eased);
+      el.style.transform = `scale(${(minScale + (1 - minScale) * eased).toFixed(4)})`;
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [minOpacity, minScale, falloff]);
+
+  return (
+    <div ref={ref} className={`scroll-focus ${className}`}>
+      {children}
     </div>
   );
 }

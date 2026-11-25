@@ -35,15 +35,27 @@ const LINKS: [number, number][] = [
 const colour = { a: "var(--logo-a)", b: "var(--logo-b)", c: "var(--logo-c)" } as const;
 
 /**
- * The atmosphere behind a page's first screen: one wash of light from the top,
- * a field of dots, and the constellation. A point of light runs along a few
- * of the lines, slowly. All of it sits still under reduced motion.
+ * The atmosphere behind a page's first screen, as the site has always had it:
+ * soft washes of blue, two blurred orbs that drift slowly, and faint ruled
+ * paper. The home page adds the constellation, which echoes the logo. All of
+ * it sits still under reduced motion.
  */
 export function Backdrop({ quiet = false }: { quiet?: boolean }) {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-      <div className="glow-top absolute inset-0" />
-      <div className="dot-grid absolute inset-0" />
+      <div className="aurora absolute inset-0 opacity-70" />
+      <div
+        className="orb left-[5%] top-[12%] h-64 w-64"
+        style={{ backgroundColor: "color-mix(in oklab, var(--tone-1) 35%, transparent)" }}
+      />
+      <div
+        className="orb right-[7%] top-[30%] h-72 w-72"
+        style={{
+          backgroundColor: "color-mix(in oklab, var(--tone-2) 35%, transparent)",
+          animationDelay: "-8s",
+        }}
+      />
+      <div className="paper-grid absolute inset-0 opacity-40" />
       {quiet ? null : (
         <svg
           viewBox="0 0 1200 700"

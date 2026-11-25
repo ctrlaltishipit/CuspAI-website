@@ -153,8 +153,11 @@ function AboutPage() {
       </section>
 
       {/* ---------------- Where this is going ---------------- */}
-      <section className="dark relative overflow-hidden bg-deep py-20 text-foreground md:py-28">
-        <div className="glow-centre pointer-events-none absolute inset-0" aria-hidden="true" />
+      <section className="dark band-deep relative overflow-hidden py-20 md:py-32">
+        <div
+          className="paper-grid pointer-events-none absolute inset-0 opacity-20"
+          aria-hidden="true"
+        />
         <div className="relative mx-auto max-w-6xl px-5 md:px-8">
           <Reveal>
             <LogoMark className="h-12 w-12" />
